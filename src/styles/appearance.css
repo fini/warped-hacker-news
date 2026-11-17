@@ -1,0 +1,227 @@
+.appearance-dialog {
+	width: min(29rem, calc(100vw - 2rem));
+	max-height: calc(100dvh - 2rem);
+	margin: auto;
+	padding: 1.75rem;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	color: var(--text);
+	background: var(--bg);
+	border: 1px solid var(--border);
+	border-radius: 1.25rem;
+	box-shadow: var(--dialog-shadow);
+}
+.appearance-dialog::backdrop {
+	background: var(--dialog-backdrop);
+	backdrop-filter: blur(0.3rem);
+}
+.appearance-heading {
+	display: flex;
+	align-items: start;
+	justify-content: space-between;
+	gap: 1rem;
+}
+.appearance-heading .eyebrow {
+	font-size: 0.6rem;
+	letter-spacing: 0.15em;
+}
+.appearance-heading h2 {
+	font-size: 1.75rem;
+	font-weight: 600;
+	letter-spacing: -0.04em;
+	line-height: 1.2;
+	margin: 0.6rem 0;
+}
+.dialog-close {
+	display: grid;
+	place-items: center;
+	width: 2rem;
+	height: 2rem;
+	flex-shrink: 0;
+	background: var(--raised);
+	color: var(--muted);
+	border-radius: 50%;
+	margin: -0.25rem -0.25rem 0 0;
+}
+.dialog-close:hover {
+	color: var(--text);
+}
+.appearance-description {
+	color: var(--muted);
+	font-size: 0.78rem;
+	line-height: 1.7;
+	margin: 0 0 1.5rem;
+	max-width: 23rem;
+}
+.appearance-dialog fieldset {
+	min-width: 0;
+	border: 0;
+	padding: 0;
+	margin: 0 0 1.5rem;
+}
+.appearance-dialog legend {
+	font-size: 0.73rem;
+	font-weight: 600;
+	margin-bottom: 0.75rem;
+	padding: 0;
+	width: 100%;
+}
+.appearance-dialog legend > span {
+	float: right;
+	font-size: 0.65rem;
+	font-weight: 400;
+	color: var(--muted);
+}
+.theme-options {
+	display: grid;
+	gap: 0.5rem;
+}
+.theme-option {
+	position: relative;
+	display: grid;
+	grid-template-columns: 2.75rem 1fr 1.15rem;
+	align-items: center;
+	gap: 0.85rem;
+	padding: 0.85rem;
+	border: 1px solid var(--border);
+	background: var(--surface);
+	border-radius: 0.8rem;
+	cursor: pointer;
+}
+.theme-option:hover {
+	background: var(--raised);
+}
+.theme-option:has(input:checked) {
+	border-color: var(--accent);
+	box-shadow: inset 0 0 0 1px var(--accent);
+}
+.theme-option-icon {
+	height: 2.75rem;
+	display: grid;
+	place-items: center;
+	background: var(--raised);
+	border-radius: 0.5rem;
+	color: var(--muted);
+}
+.theme-option:has(input:checked) .theme-option-icon {
+	color: var(--accent);
+}
+.theme-option-copy {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	min-width: 0;
+}
+.theme-option-copy strong {
+	font-size: 0.85rem;
+	font-weight: 600;
+}
+.theme-option-copy > span {
+	font-size: 0.69rem;
+	line-height: 1.5;
+	color: var(--muted);
+}
+.choice-indicator {
+	width: 1.05rem;
+	height: 1.05rem;
+	border: 1px solid var(--border);
+	border-radius: 50%;
+	display: grid;
+	place-items: center;
+	color: transparent;
+}
+.theme-option:has(input:checked) .choice-indicator {
+	background: var(--accent);
+	border-color: var(--accent);
+	color: var(--on-accent);
+}
+.appearance-dialog input[type='radio'] {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.appearance-dialog label:has(input:focus-visible) {
+	outline: 3px solid var(--focus);
+	outline-offset: 3px;
+}
+.appearance-segments {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.25rem;
+	padding: 0.3rem;
+	border: 1px solid var(--border);
+	border-radius: 0.7rem;
+	background: var(--raised);
+}
+.appearance-segments label {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	min-height: 2.6rem;
+	font-size: 0.74rem;
+	border-radius: 0.45rem;
+	color: var(--muted);
+	cursor: pointer;
+	border: 1px solid transparent;
+}
+.appearance-segments label:has(input:checked) {
+	background: var(--surface);
+	color: var(--text);
+	border-color: var(--border);
+}
+.appearance-hint {
+	font-size: 0.66rem;
+	line-height: 1.65;
+	color: var(--muted);
+	margin: 0.65rem 0 0;
+	min-height: 2.2em;
+}
+.appearance-actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	border-top: 1px solid var(--border);
+	padding-top: 1.15rem;
+}
+.dialog-cancel {
+	font-size: 0.75rem;
+	padding: 0.75rem 0.4rem;
+	background: transparent;
+	color: var(--muted);
+}
+.appearance-actions .primary {
+	background: var(--accent);
+	color: var(--on-accent);
+	border-radius: 0.6rem;
+}
+@media (max-width: 43rem) {
+	.appearance-dialog {
+		padding: 1.25rem;
+		width: calc(100vw - 1.5rem);
+		border-radius: 1rem;
+	}
+	.appearance-heading h2 {
+		font-size: 1.6rem;
+	}
+	.theme-option {
+		gap: 0.65rem;
+		padding: 0.75rem;
+	}
+	.appearance-segments label {
+		gap: 0.35rem;
+	}
+	.appearance-description {
+		font-size: 0.75rem;
+	}
+	.appearance-actions .primary {
+		padding-inline: 0.85rem;
+	}
+}

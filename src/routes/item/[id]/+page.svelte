@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteTitle } from '#lib/branding';
 	import { page } from '$app/state';
 	import { age, domain, safeUrl } from '#lib/hn';
 	import CommentList from '#lib/components/CommentList.svelte';
@@ -6,7 +7,7 @@
 	let { data } = $props();
 </script>
 
-<svelte:head><title>{data.item.title ?? 'Discussion'} — Warped Hacker News</title></svelte:head>
+<svelte:head><title>{data.item.title ?? 'Discussion'} — {siteTitle}</title></svelte:head>
 <div class="reading-page">
 	<a class="back-link" href="/">Back to the front page</a><span class="eyebrow"
 		>The conversation</span

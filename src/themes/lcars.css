@@ -14,14 +14,13 @@ html[data-theme='lcars'] {
 	--radius: 1.8rem;
 }
 html[data-theme='lcars'] .site-shell {
-	border-left: 0.65rem solid var(--accent);
-	margin-top: 1.5rem;
+	margin-top: 0;
 }
 html[data-theme='lcars'] .site-header {
-	border-top: 1rem solid var(--accent);
-	border-radius: 3rem 0 0 0;
-	padding-top: 1rem;
-	border-bottom: 0;
+	border-top: 0;
+	border-radius: 0;
+	padding-top: 0;
+	border-bottom: 1px solid var(--border);
 }
 html[data-theme='lcars'] .brand {
 	font-family: var(--font-heading);
@@ -38,7 +37,7 @@ html[data-theme='lcars'] .site-header nav {
 html[data-theme='lcars'] .site-header nav a {
 	background: #cc99ff;
 	color: #08090d;
-	border-radius: 2rem 0 0 2rem;
+	border-radius: 999rem;
 	padding: 0.6rem 0.9rem;
 	font-family: var(--font-heading);
 	font-size: 1.15rem;
@@ -91,11 +90,21 @@ html[data-theme='lcars'] .comment-count strong {
 }
 @media (max-width: 43rem) {
 	html[data-theme='lcars'] .site-shell {
-		border-left-width: 0.35rem;
-		margin-top: 0.5rem;
+		margin-top: 0;
 	}
 	html[data-theme='lcars'] .site-header nav a {
 		font-size: 1rem;
 		padding: 0.5rem 0.65rem;
 	}
+}
+
+html[data-theme='lcars'] .appearance-dialog {
+	border-radius: 1.5rem;
+}
+html[data-theme='lcars'] .theme-option {
+	border-radius: 1.2rem;
+}
+html[data-theme='lcars'] .appearance-heading h2 {
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
 }

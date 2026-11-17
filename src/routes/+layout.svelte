@@ -8,10 +8,10 @@
 	import { page } from '$app/state';
 	import { navigating } from '$app/state';
 	import { feeds } from '#lib/hn';
-	import { themes } from '#lib/themes';
+	import { tagline } from '#lib/branding';
+	import AppearancePicker from '#lib/components/AppearancePicker.svelte';
 	import Icon from '#lib/components/Icon.svelte';
 	let { data, children } = $props();
-	let settings = $state(false);
 	let menu = $state(false);
 </script>
 
@@ -25,8 +25,7 @@
 <div class="site-shell">
 	<header class="site-header">
 		<a class="brand" href="/" aria-label="Warped Hacker News home"
-			><span class="brand-mark">w.</span><span
-				>warped<span class="brand-sub">hacker news, reimagined</span></span
+			><span class="brand-mark">w.</span><span>warped<span class="brand-sub">{tagline}</span></span
 			></a
 		>
 		<button
@@ -47,33 +46,12 @@
 					onclick={() => (menu = false)}>{feed.name}</a
 				>{/each}
 		</nav>
-		<button
-			class="appearance-button"
-			disabled={!ready}
-			aria-label="Appearance"
-			onclick={() => (settings = !settings)}
-			aria-expanded={settings}
-			aria-controls="appearance"><Icon name="sun" /><span>Appearance</span></button
-		>
+		<AppearancePicker
+			theme={data.theme}
+			appearance={data.appearance}
+			returnTo={page.url.pathname + page.url.search}
+		/>
 	</header>
-	{#if settings}<section id="appearance" class="appearance-panel" aria-label="Appearance settings">
-			<div>
-				<span class="eyebrow">Make yourself at home</span>
-				<h2>Your news. Your atmosphere.</h2>
-			</div>
-			<form action="/appearance" method="POST">
-				<input type="hidden" name="returnTo" value={page.url.pathname + page.url.search} /><label
-					>Theme<select name="theme" value={data.theme}
-						>{#each themes as theme}<option value={theme.id}>{theme.name}</option>{/each}</select
-					></label
-				><label
-					>Modern appearance<select name="appearance" value={data.appearance}
-						><option value="system">Follow system</option><option value="light">Light</option
-						><option value="dark">Dark</option></select
-					></label
-				><button class="primary" type="submit">Apply appearance <Icon name="arrow" /></button>
-			</form>
-		</section>{/if}
 	<div class="theme-ornament" aria-hidden="true"></div>
 	{#if navigating.to}<div class="navigation-progress" role="status">Loading stories…</div>{/if}
 	<main id="main" tabindex="-1">{@render children()}</main>

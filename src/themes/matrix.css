@@ -43,3 +43,7 @@ html[data-theme='matrix'] .story-rank {
 html[data-theme='matrix'] .site-header nav a[aria-current='page']::before {
 	content: '> ';
 }
+
+html[data-theme='matrix'] .brand-sub {
+	text-transform: lowercase;
+}

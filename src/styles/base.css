@@ -335,38 +335,6 @@ h2,
 .site-footer small {
 	font-size: 0.6rem;
 }
-.appearance-panel {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 2rem;
-	padding: 2rem;
-	background: var(--raised);
-	border-bottom: 1px solid var(--border);
-	border-radius: var(--radius);
-}
-.appearance-panel h2 {
-	font-size: 1.15rem;
-	margin: 0.6rem 0 0;
-}
-.appearance-panel form {
-	display: flex;
-	align-items: end;
-	gap: 1rem;
-}
-.appearance-panel label {
-	display: flex;
-	flex-direction: column;
-	font-size: 0.7rem;
-	gap: 0.5rem;
-}
-select {
-	padding: 0.65rem;
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: var(--radius);
-	min-height: 2.75rem;
-}
 .theme-ornament {
 	display: none;
 }
@@ -580,13 +548,6 @@ select {
 	.appearance-button span {
 		display: none;
 	}
-	.appearance-panel {
-		align-items: stretch;
-		flex-direction: column;
-	}
-	.appearance-panel form {
-		flex-wrap: wrap;
-	}
 }
 @media (max-width: 43rem) {
 	.site-shell {
@@ -696,16 +657,6 @@ select {
 	.discussion-heading > a {
 		max-width: 8rem;
 		text-align: right;
-	}
-	.appearance-panel {
-		padding: 1rem;
-	}
-	.appearance-panel label {
-		flex: 1;
-		min-width: 8rem;
-	}
-	.appearance-panel .primary {
-		width: 100%;
 	}
 	.back-link {
 		margin-bottom: 2rem;

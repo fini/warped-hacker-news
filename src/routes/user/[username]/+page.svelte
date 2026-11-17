@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { siteTitle } from '#lib/branding';
 	import Icon from '#lib/components/Icon.svelte';
 	let { data } = $props();
 </script>
 
-<svelte:head><title>{data.user.id} — Warped Hacker News</title></svelte:head>
+<svelte:head><title>{data.user.id} — {siteTitle}</title></svelte:head>
 <div class="reading-page profile">
 	<a class="back-link" href="/">Back to the front page</a><span class="eyebrow"
 		>One of the curious</span

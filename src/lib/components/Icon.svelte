@@ -3,10 +3,29 @@
 		name,
 		size = 18
 	}: {
-		name: 'arrow' | 'external' | 'menu' | 'close' | 'chevron' | 'sun' | 'spark';
+		name:
+			| 'arrow'
+			| 'external'
+			| 'menu'
+			| 'close'
+			| 'chevron'
+			| 'sun'
+			| 'spark'
+			| 'moon'
+			| 'monitor'
+			| 'layout'
+			| 'panels'
+			| 'terminal'
+			| 'check';
 		size?: number;
 	} = $props();
 	const paths = {
+		check: 'm5 12 4 4L19 6',
+		moon: 'M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z',
+		monitor: 'M3 4h18v13H3zM8 21h8M12 17v4',
+		layout: 'M4 4h16v16H4zM4 9h16M8 13h8M8 16h5',
+		panels: 'M9 4H6a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h3M12 4h9M12 9h9M12 14h9M12 20h9',
+		terminal: 'M3 4h18v16H3zM7 9l3 3-3 3M13 15h4',
 		arrow: 'M4 12h16m-6-6 6 6-6 6',
 		external: 'M14 4h6v6M20 4 10 14M10 4H4v16h16v-6',
 		menu: 'M4 6h16M4 12h16M4 18h16',

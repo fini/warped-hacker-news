@@ -45,8 +45,11 @@ fonts and shapes; use Icon.svelte for shared SVG geometry.
 A native POST to /appearance saves allowlisted preferences in one-year,
 SameSite=Lax HttpOnly cookies, then redirects to a validated local return path.
 Server hooks apply root attributes before the HTML is painted. Core content and links are server-rendered. Theme settings use a native form;
-the settings toggle, mobile menu, collapsing and progressive replies need client
-JavaScript. Build identity is frozen into client/server bundles during build.
+the settings dialog, mobile menu, collapsing and progressive replies need client
+JavaScript. Appearance uses a native modal dialog with radio-card theme choices
+and segmented color-mode controls. Escape, backdrop dismissal, focus trapping
+and focus return preserve keyboard access without native select popups. Cancel
+discards unsaved choices. Build identity is frozen into client/server bundles during build.
 
 ## Delivery
 

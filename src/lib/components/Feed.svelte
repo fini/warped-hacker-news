@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { siteTitle } from '#lib/branding';
 	import { page } from '$app/state';
 	import type { Item } from '#lib/hn';
 	import StoryRow from './StoryRow.svelte';
@@ -18,7 +19,7 @@
 	} = $props();
 </script>
 
-<svelte:head><title>{data.feed.name} stories — Warped Hacker News</title></svelte:head>
+<svelte:head><title>{data.feed.name} stories — {siteTitle}</title></svelte:head>
 <section class="feed-intro">
 	<div>
 		<span class="eyebrow"><span class="status-dot"></span> A signal worth following</span>
