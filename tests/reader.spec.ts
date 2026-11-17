@@ -3,7 +3,7 @@ test('reads stories, profiles and pagination', async ({ page }) => {
 	await page.goto('/');
 	await expect(page.getByRole('heading', { name: 'Stay curious.' })).toBeVisible();
 	await expect(page.locator('.brand-sub')).toHaveText('engaged');
-	await expect(page).toHaveTitle(/Hacker News, engaged/);
+	await expect(page).toHaveTitle(/Warped Hacker News, engaged/);
 	await expect(page.locator('.story-row').first()).toBeVisible();
 	await page.getByRole('link', { name: 'More stories', exact: true }).click();
 	await expect(page).toHaveURL(/page=2/);

@@ -1,7 +1,7 @@
-# Hacker News, engaged
+# Warped Hacker News, engaged
 
-Product name: Hacker News, engaged. The warped-hacker-news repository and Worker
-names are technical identifiers, not the displayed brand.
+Product name: Warped Hacker News, engaged. Keep casing theme-dependent.
+The repository and Worker identifiers remain warped-hacker-news.
 
 Public, read-only Hacker News reader. SvelteKit 3 / Svelte 5 / TypeScript / npm,
 Cloudflare Workers and project-local Wrangler. App lives at the repository root.

@@ -87,6 +87,7 @@ h2,
 	text-decoration: none;
 }
 .brand-mark {
+	flex-shrink: 0;
 	background: var(--accent);
 	color: var(--on-accent);
 	border-radius: 0.7rem;
@@ -560,6 +561,8 @@ h2,
 		padding: 1rem 0;
 	}
 	.brand {
+		flex: 1;
+		min-width: 0;
 		margin-right: auto;
 		font-size: 1.2rem;
 	}

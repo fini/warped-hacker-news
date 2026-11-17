@@ -1,4 +1,4 @@
-# Hacker News, engaged
+# Warped Hacker News, engaged
 
 A different lens on the same curious community. A fast, text-first Hacker News
 reader with Modern (light/dark/system), LCARS, and Matrix themes.
