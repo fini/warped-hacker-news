@@ -1,6 +1,7 @@
 import type { Handle } from '@sveltejs/kit/hooks';
 import { resolveTheme, resolveAppearance } from '#lib/themes';
 export const handle: Handle = async ({ event, resolve }) => {
+	event.locals.motion = event.cookies.get('whn_motion') !== 'off';
 	event.locals.theme = resolveTheme(event.cookies.get('whn_theme'));
 	event.locals.appearance = resolveAppearance(event.cookies.get('whn_appearance'));
 	const response = await resolve(event, {

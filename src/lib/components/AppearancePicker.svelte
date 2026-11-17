@@ -2,11 +2,16 @@
 	import { onMount, untrack } from 'svelte';
 	import { themes, type Theme, type Appearance } from '#lib/themes';
 	import Icon from './Icon.svelte';
-	let { theme, appearance, returnTo }: { theme: Theme; appearance: Appearance; returnTo: string } =
-		$props();
+	let {
+		theme,
+		motion,
+		appearance,
+		returnTo
+	}: { theme: Theme; motion: boolean; appearance: Appearance; returnTo: string } = $props();
 	let dialog: HTMLDialogElement;
 	let ready = $state(false);
 	let open = $state(false);
+	let selectedMotion = $state(untrack(() => motion));
 	let selectedTheme = $state(untrack(() => theme));
 	let selectedAppearance = $state(untrack(() => appearance));
 	const descriptions = {
@@ -23,6 +28,7 @@
 		ready = true;
 	});
 	function show() {
+		selectedMotion = motion;
 		selectedTheme = theme;
 		selectedAppearance = appearance;
 		dialog.showModal();
@@ -76,53 +82,75 @@
 	</p>
 	<form action="/appearance" method="POST">
 		<input type="hidden" name="returnTo" value={returnTo} />
-		<fieldset class="theme-fieldset">
-			<legend>Choose your theme</legend>
-			<div class="theme-options">
-				{#each themes as choice}<label class="theme-option"
-						><input
-							type="radio"
-							name="theme"
-							value={choice.id}
-							bind:group={selectedTheme}
-							aria-label={choice.name}
-							aria-describedby={`theme-description-${choice.id}`}
-						/><span class="theme-option-icon"
-							><Icon
-								name={choice.id === 'modern'
-									? 'layout'
-									: choice.id === 'lcars'
-										? 'panels'
-										: 'terminal'}
-								size={22}
-							/></span
-						><span class="theme-option-copy"
-							><strong>{choice.name}</strong><span id={`theme-description-${choice.id}`}
-								>{descriptions[choice.id]}</span
-							></span
-						><span class="choice-indicator"><Icon name="check" size={13} /></span></label
-					>{/each}
-			</div>
-		</fieldset>
-		<fieldset class="appearance-fieldset">
-			<legend>Color mode <span>Modern theme</span></legend>
-			<div class="appearance-segments">
-				{#each appearances as mode}<label
-						><input
-							type="radio"
-							name="appearance"
-							value={mode.id}
-							bind:group={selectedAppearance}
-							aria-label={mode.name}
-						/><Icon name={mode.icon} size={17} /><span>{mode.name}</span></label
-					>{/each}
-			</div>
-			<p class="appearance-hint">
-				{selectedTheme === 'modern'
-					? 'System follows your device’s light or dark setting.'
-					: 'This theme has its own dark palette. Your color mode is saved for Modern.'}
-			</p>
-		</fieldset>
+		<div class="appearance-form-body">
+			<fieldset class="theme-fieldset">
+				<legend>Choose your theme</legend>
+				<div class="theme-options">
+					{#each themes as choice}<label class="theme-option"
+							><input
+								type="radio"
+								name="theme"
+								value={choice.id}
+								bind:group={selectedTheme}
+								aria-label={choice.name}
+								aria-describedby={`theme-description-${choice.id}`}
+							/><span class="theme-option-icon"
+								><Icon
+									name={choice.id === 'modern'
+										? 'layout'
+										: choice.id === 'lcars'
+											? 'panels'
+											: 'terminal'}
+									size={22}
+								/></span
+							><span class="theme-option-copy"
+								><strong>{choice.name}</strong><span id={`theme-description-${choice.id}`}
+									>{descriptions[choice.id]}</span
+								></span
+							><span class="choice-indicator"><Icon name="check" size={13} /></span></label
+						>{/each}
+				</div>
+			</fieldset>
+			<fieldset class="appearance-fieldset" disabled={selectedTheme !== 'modern'}>
+				<legend>Color mode <span>Modern theme</span></legend>
+				<div class="appearance-segments">
+					{#each appearances as mode}<label
+							><input
+								type="radio"
+								name="appearance"
+								value={mode.id}
+								bind:group={selectedAppearance}
+								aria-label={mode.name}
+							/><Icon name={mode.icon} size={17} /><span>{mode.name}</span></label
+						>{/each}
+				</div>
+				<p class="appearance-hint">
+					{selectedTheme === 'modern'
+						? 'System follows your device’s light or dark setting.'
+						: 'This theme has its own dark palette. Your color mode is saved for Modern.'}
+				</p>
+			</fieldset>
+			{#if selectedTheme !== 'modern'}<input
+					type="hidden"
+					name="appearance"
+					value={selectedAppearance}
+				/>{/if}
+			{#if selectedTheme === 'matrix'}
+				<label class="motion-setting"
+					><span
+						><strong>Ambient motion</strong><small
+							>Faint character rain. Device motion preferences take priority.</small
+						></span
+					><input
+						type="checkbox"
+						name="motion"
+						value="on"
+						bind:checked={selectedMotion}
+						aria-label="Ambient motion"
+					/><span class="motion-switch" aria-hidden="true"></span></label
+				>
+			{:else}<input type="hidden" name="motion" value={selectedMotion ? 'on' : 'off'} />{/if}
+		</div>
 		<div class="appearance-actions">
 			<button class="dialog-cancel" type="button" onclick={() => dialog.close()}>Cancel</button
 			><button class="primary" type="submit"

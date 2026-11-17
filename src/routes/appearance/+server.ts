@@ -9,6 +9,7 @@ export const POST: import('./$types').RequestHandler = async ({ request, cookies
 		httpOnly: true,
 		secure: new URL(request.url).protocol === 'https:'
 	};
+	cookies.set('whn_motion', data.get('motion') === 'on' ? 'on' : 'off', options);
 	cookies.set('whn_theme', resolveTheme(data.get('theme')), options);
 	cookies.set('whn_appearance', resolveAppearance(data.get('appearance')), options);
 	const back = String(data.get('returnTo') ?? '/');

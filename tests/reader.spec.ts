@@ -144,3 +144,52 @@ test('appearance dialog supports keyboard, cancel and dark mode', async ({ page 
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 	await page.getByRole('button', { name: 'Close appearance' }).click();
 });
+
+test('fixed dark themes preserve Modern mode and ambient motion respects preferences', async ({
+	page
+}) => {
+	await page.emulateMedia({ reducedMotion: 'no-preference' });
+	await page.goto('/');
+	const trigger = page.getByRole('button', { name: 'Appearance', exact: true });
+	const apply = page.getByRole('button', { name: 'Apply appearance' });
+	const canvas = page.locator('.ambient-background');
+	await expect(canvas).toHaveAttribute('data-animating', 'false');
+	await trigger.click();
+	await page.getByRole('radio', { name: 'Dark', exact: true }).check();
+	await apply.click();
+	for (const theme of ['LCARS', 'Matrix']) {
+		await trigger.click();
+		await page.getByRole('radio', { name: theme, exact: true }).check();
+		await expect(apply).toBeInViewport({ ratio: 1 });
+		for (const mode of ['Light', 'Dark', 'System'])
+			await expect(page.getByRole('radio', { name: mode, exact: true })).toBeDisabled();
+		await apply.click();
+		await expect(page.locator('html')).toHaveAttribute('data-appearance', 'dark');
+	}
+	await expect(canvas).toHaveAttribute('data-animating', 'true');
+	expect(await canvas.evaluate((c) => getComputedStyle(c).pointerEvents)).toBe('none');
+	const initial = await canvas.evaluate((c) => (c as HTMLCanvasElement).toDataURL());
+	await expect
+		.poll(() => canvas.evaluate((c) => (c as HTMLCanvasElement).toDataURL()))
+		.not.toBe(initial);
+	await page.screenshot({ path: `test-results/matrix-ambient-${test.info().project.name}.png` });
+	await page.emulateMedia({ reducedMotion: 'reduce' });
+	await expect(canvas).toHaveAttribute('data-animating', 'false');
+	await expect(canvas).toBeHidden();
+	await page.emulateMedia({ reducedMotion: 'no-preference' });
+	await expect(canvas).toHaveAttribute('data-animating', 'true');
+	await trigger.click();
+	await page.getByRole('checkbox', { name: 'Ambient motion' }).uncheck();
+	await apply.click();
+	await expect(canvas).toHaveAttribute('data-animating', 'false');
+	await page.reload();
+	await expect(canvas).toHaveAttribute('data-animating', 'false');
+	await trigger.click();
+	await expect(page.getByRole('checkbox', { name: 'Ambient motion' })).not.toBeChecked();
+	await page.getByRole('radio', { name: 'Modern', exact: true }).check();
+	await expect(page.getByRole('radio', { name: 'Dark', exact: true })).toBeEnabled();
+	await expect(page.getByRole('radio', { name: 'Dark', exact: true })).toBeChecked();
+	await apply.click();
+	await expect(canvas).toBeHidden();
+	await expect(canvas).toHaveAttribute('data-animating', 'false');
+});

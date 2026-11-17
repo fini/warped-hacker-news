@@ -47,3 +47,28 @@ html[data-theme='matrix'] .site-header nav a[aria-current='page']::before {
 html[data-theme='matrix'] .brand-sub {
 	text-transform: lowercase;
 }
+
+html[data-theme='matrix'] .ambient-background {
+	display: block;
+	color: var(--accent);
+	font-family: var(--font-body);
+	opacity: 0.14;
+	mask-image: linear-gradient(
+		to right,
+		black,
+		rgba(0, 0, 0, 0.22) 28%,
+		rgba(0, 0, 0, 0.22) 72%,
+		black
+	);
+}
+html[data-theme='matrix'] .site-header,
+html[data-theme='matrix'] .feed-section,
+html[data-theme='matrix'] .reading-page,
+html[data-theme='matrix'] .site-footer {
+	background: var(--bg);
+}
+@media (prefers-reduced-motion: reduce) {
+	html[data-theme='matrix'] .ambient-background {
+		display: none;
+	}
+}

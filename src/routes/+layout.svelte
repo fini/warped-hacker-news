@@ -11,6 +11,7 @@
 	import { tagline, productName, productQualifier } from '#lib/branding';
 	import AppearancePicker from '#lib/components/AppearancePicker.svelte';
 	import Icon from '#lib/components/Icon.svelte';
+	import AmbientRain from '#lib/components/AmbientRain.svelte';
 	let { data, children } = $props();
 	let menu = $state(false);
 </script>
@@ -21,6 +22,7 @@
 		content="A fresh perspective on Hacker News. Read the stories, ideas, and conversations that matter — in your own style."
 	/></svelte:head
 >
+<AmbientRain enabled={data.motion} />
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="site-shell">
 	<header class="site-header">
@@ -48,6 +50,7 @@
 				>{/each}
 		</nav>
 		<AppearancePicker
+			motion={data.motion}
 			theme={data.theme}
 			appearance={data.appearance}
 			returnTo={page.url.pathname + page.url.search}

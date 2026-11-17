@@ -67,3 +67,18 @@ are public. Preview lifecycle is managed in Cloudflare, not by GitHub Actions.
 The one-time repository connection and build credentials live in Cloudflare's
 Builds settings. The connection requires Workers CI access or dashboard access;
 source changes alone cannot enable it. README.md records exact settings.
+
+## Ambient motion
+
+The shared ambient canvas is hidden and idle by default. Matrix enables a faint,
+sparse character rain adapted from the Jev lab reference. Its palette and mask
+live in the Matrix theme; shared rendering uses semantic colors and fonts. Solid
+reading surfaces protect story and discussion text. The canvas is decorative,
+ignores pointer events, renders at roughly 12 fps, and caps its drawing buffer at
+1920 by 1080. It stops when the tab is hidden, when reduced motion is requested,
+or when Ambient motion is disabled in Appearance. Media preference changes take
+effect immediately. The one-year whn_motion cookie saves the browser preference.
+Modern and LCARS never run the animation.
+
+Color-mode controls are disabled for LCARS and Matrix. A hidden form value keeps
+the saved Modern color-mode preference when either fixed dark theme is applied.
