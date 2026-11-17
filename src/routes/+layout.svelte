@@ -1,5 +1,10 @@
 <script lang="ts">
 	import '../app.css';
+	import { onMount } from 'svelte';
+	let ready = $state(false);
+	onMount(() => {
+		ready = true;
+	});
 	import { page } from '$app/state';
 	import { navigating } from '$app/state';
 	import { feeds } from '#lib/hn';
@@ -26,6 +31,7 @@
 		>
 		<button
 			class="icon-button mobile-menu"
+			disabled={!ready}
 			aria-label="Toggle navigation"
 			aria-expanded={menu}
 			onclick={() => (menu = !menu)}><Icon name={menu ? 'close' : 'menu'} /></button
@@ -43,6 +49,7 @@
 		</nav>
 		<button
 			class="appearance-button"
+			disabled={!ready}
 			aria-label="Appearance"
 			onclick={() => (settings = !settings)}
 			aria-expanded={settings}

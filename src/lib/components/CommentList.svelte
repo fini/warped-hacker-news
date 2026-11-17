@@ -1,4 +1,9 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	let ready = $state(false);
+	onMount(() => {
+		ready = true;
+	});
 	import { untrack } from 'svelte';
 	import type { Item } from '#lib/hn';
 	import Comment from './Comment.svelte';
@@ -52,7 +57,7 @@
 	{#each [...initial, ...extra] as comment (comment.id)}<Comment item={comment} {depth} />{/each}
 </div>
 {#if more}<div class="load-comments">
-		<button class="secondary" onclick={load} disabled={pending} aria-busy={pending}
+		<button class="secondary" onclick={load} disabled={pending || !ready} aria-busy={pending}
 			>{pending
 				? 'Loading replies…'
 				: failure
