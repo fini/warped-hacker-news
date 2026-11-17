@@ -44,9 +44,9 @@ responses for deterministic data-boundary and failure checks.
 Cloudflare Workers Builds pulls directly from GitHub and deploys `main`.
 GitHub Actions runs validation only and needs no Cloudflare secrets.
 
-Connect the existing Worker once in Cloudflare: **Workers & Pages →
-warped-hacker-news → Settings → Builds → Connect**, then select GitHub and
-`fini/warped-hacker-news`. Use these settings:
+The existing Worker is connected to `fini/warped-hacker-news`. Manage its Git
+integration under **Workers & Pages → warped-hacker-news → Settings → Builds**.
+The configured settings are:
 
 | Setting           | Value                          |
 | ----------------- | ------------------------------ |
@@ -57,18 +57,19 @@ warped-hacker-news → Settings → Builds → Connect**, then select GitHub and
 | Preview command   | `npx wrangler preview`         |
 | Node version      | `24` (also pinned in `.nvmrc`) |
 
-Let Cloudflare manage its build credential through the dashboard. No
-`CLOUDFLARE_API_TOKEN` or account variable is needed in GitHub. Enable Preview
-Builds for trusted development branches if previews are desired; preview URLs
-are public. Cloudflare manages those previews rather than GitHub Actions.
+Cloudflare uses its existing managed build credential. No `CLOUDFLARE_API_TOKEN`
+or account variable is needed in GitHub. Preview Builds are enabled for
+development branches; preview URLs are public. Cloudflare manages those
+previews rather than GitHub Actions.
 
 The build command checks formatting, types and unit tests before producing the
 Worker bundle. GitHub Actions additionally runs browser tests in parallel;
 Cloudflare does not wait for the GitHub job. Use pull requests and require the
 `verify` check before merging when a browser-test gate is needed.
 
-After connecting, push a commit to trigger and verify a deployment in the
-Cloudflare Builds view. A checked-in workflow does not establish the connection.
+Push a commit to `main` to trigger production deployment. Check its commit and
+deployment status in the Cloudflare Builds view; the site footer identifies
+the loaded release.
 Manual fallback: run the checks and `npm run deploy` using local Wrangler OAuth.
 
 ### Troubleshooting and rollback
