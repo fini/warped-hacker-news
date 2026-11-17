@@ -1,0 +1,101 @@
+html[data-theme='lcars'] {
+	color-scheme: dark;
+	--bg: #08090d;
+	--surface: #10121b;
+	--raised: #171522;
+	--text: #f1ebff;
+	--muted: #c0b2d1;
+	--accent: #ffaa55;
+	--on-accent: #08090d;
+	--border: #353047;
+	--focus: #55ddee;
+	--error: #ffb4a9;
+	--font-heading: 'Barlow Condensed', sans-serif;
+	--radius: 1.8rem;
+}
+html[data-theme='lcars'] .site-shell {
+	border-left: 0.65rem solid var(--accent);
+	margin-top: 1.5rem;
+}
+html[data-theme='lcars'] .site-header {
+	border-top: 1rem solid var(--accent);
+	border-radius: 3rem 0 0 0;
+	padding-top: 1rem;
+	border-bottom: 0;
+}
+html[data-theme='lcars'] .brand {
+	font-family: var(--font-heading);
+	text-transform: uppercase;
+	font-size: 2rem;
+	letter-spacing: 0.02em;
+}
+html[data-theme='lcars'] .brand-mark {
+	border-radius: 1.5rem 0 0 1.5rem;
+}
+html[data-theme='lcars'] .site-header nav {
+	gap: 0.4rem;
+}
+html[data-theme='lcars'] .site-header nav a {
+	background: #cc99ff;
+	color: #08090d;
+	border-radius: 2rem 0 0 2rem;
+	padding: 0.6rem 0.9rem;
+	font-family: var(--font-heading);
+	font-size: 1.15rem;
+	text-transform: uppercase;
+}
+html[data-theme='lcars'] .site-header nav a:nth-child(2n) {
+	background: #9999ff;
+}
+html[data-theme='lcars'] .site-header nav a[aria-current='page'] {
+	background: #55ddee;
+	border-color: transparent;
+}
+html[data-theme='lcars'] .theme-ornament {
+	display: block;
+	height: 0.6rem;
+	background: linear-gradient(
+		to right,
+		#ffaa55 0 40%,
+		transparent 40% 41%,
+		#cc99ff 41% 65%,
+		transparent 65% 66%,
+		#9999ff 66%
+	);
+	margin-top: 1.5rem;
+	border-radius: 1rem;
+}
+html[data-theme='lcars'] .feed-intro h1,
+html[data-theme='lcars'] .reading-page h1 {
+	letter-spacing: 0.01em;
+	text-transform: uppercase;
+	color: #ffcc99;
+}
+html[data-theme='lcars'] .story-rank {
+	color: #9999ff;
+	font-family: var(--font-heading);
+	font-size: 1rem;
+}
+html[data-theme='lcars'] .list-heading {
+	border-bottom: 0.35rem solid #cc99ff;
+}
+html[data-theme='lcars'] .primary {
+	background: var(--accent);
+	color: var(--on-accent);
+	font-family: var(--font-heading);
+	font-size: 1rem;
+	text-transform: uppercase;
+}
+html[data-theme='lcars'] .comment-count strong {
+	color: #55ddee;
+}
+@media (max-width: 43rem) {
+	html[data-theme='lcars'] .site-shell {
+		border-left-width: 0.35rem;
+		margin-top: 0.5rem;
+	}
+	html[data-theme='lcars'] .site-header nav a {
+		font-size: 1rem;
+		padding: 0.5rem 0.65rem;
+	}
+}

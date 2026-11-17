@@ -1,0 +1,9 @@
+node_modules/
+.svelte-kit/
+.wrangler/
+build/
+.env*
+.dev.vars*
+playwright-report/
+test-results/
+.DS_Store

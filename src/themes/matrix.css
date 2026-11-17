@@ -1,0 +1,45 @@
+html[data-theme='matrix'] {
+	color-scheme: dark;
+	--bg: #050a07;
+	--surface: #09140e;
+	--raised: #10251a;
+	--text: #d2f9dc;
+	--muted: #98bda4;
+	--accent: #55ed87;
+	--on-accent: #031207;
+	--border: #284b35;
+	--focus: #7bffa4;
+	--error: #ff9ca8;
+	--font-body: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+	--font-heading: var(--font-body);
+	--radius: 0.2rem;
+}
+html[data-theme='matrix'] .brand-mark {
+	border: 1px solid var(--accent);
+	background: transparent;
+	color: var(--accent);
+}
+html[data-theme='matrix'] .feed-intro h1 {
+	letter-spacing: -0.06em;
+	text-shadow: 0 0 1.5rem #55ed8726;
+}
+html[data-theme='matrix'] .eyebrow {
+	letter-spacing: 0.13em;
+}
+html[data-theme='matrix'] .theme-ornament {
+	display: block;
+	height: 1px;
+	background: linear-gradient(to right, var(--accent), transparent);
+	margin-top: 0.4rem;
+}
+html[data-theme='matrix'] .primary {
+	background: var(--raised);
+	border: 1px solid var(--accent);
+	color: var(--accent);
+}
+html[data-theme='matrix'] .story-rank {
+	color: var(--accent);
+}
+html[data-theme='matrix'] .site-header nav a[aria-current='page']::before {
+	content: '> ';
+}

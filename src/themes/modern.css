@@ -1,0 +1,28 @@
+html[data-theme='modern'][data-appearance='dark'] {
+	color-scheme: dark;
+	--bg: #171a19;
+	--surface: #1c201e;
+	--raised: #252b27;
+	--text: #eeeae2;
+	--muted: #a4aaa0;
+	--accent: #f19875;
+	--on-accent: #171a19;
+	--border: #343b35;
+	--focus: #9fbbef;
+	--error: #ffa69e;
+}
+@media (prefers-color-scheme: dark) {
+	html[data-theme='modern'][data-appearance='system'] {
+		color-scheme: dark;
+		--bg: #171a19;
+		--surface: #1c201e;
+		--raised: #252b27;
+		--text: #eeeae2;
+		--muted: #a4aaa0;
+		--accent: #f19875;
+		--on-accent: #171a19;
+		--border: #343b35;
+		--focus: #9fbbef;
+		--error: #ffa69e;
+	}
+}
