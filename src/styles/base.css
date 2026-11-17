@@ -95,8 +95,8 @@ h2,
 	display: grid;
 	place-items: center;
 	letter-spacing: -0.1em;
-	font-size: 2.1rem;
-	padding-right: 0.25rem;
+	font-size: 1.3rem;
+	padding-right: 0;
 }
 .brand-sub {
 	display: block;
@@ -561,7 +561,7 @@ h2,
 	}
 	.brand {
 		margin-right: auto;
-		font-size: 1.4rem;
+		font-size: 1.2rem;
 	}
 	.brand-mark {
 		width: 2.5rem;

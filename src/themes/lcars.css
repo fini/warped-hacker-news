@@ -89,6 +89,9 @@ html[data-theme='lcars'] .comment-count strong {
 	color: #55ddee;
 }
 @media (max-width: 43rem) {
+	html[data-theme='lcars'] .brand {
+		font-size: 1.65rem;
+	}
 	html[data-theme='lcars'] .site-shell {
 		margin-top: 0;
 	}

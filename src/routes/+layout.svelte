@@ -8,7 +8,7 @@
 	import { page } from '$app/state';
 	import { navigating } from '$app/state';
 	import { feeds } from '#lib/hn';
-	import { tagline } from '#lib/branding';
+	import { tagline, productName, productQualifier } from '#lib/branding';
 	import AppearancePicker from '#lib/components/AppearancePicker.svelte';
 	import Icon from '#lib/components/Icon.svelte';
 	let { data, children } = $props();
@@ -24,8 +24,9 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="site-shell">
 	<header class="site-header">
-		<a class="brand" href="/" aria-label="Warped Hacker News home"
-			><span class="brand-mark">w.</span><span>warped<span class="brand-sub">{tagline}</span></span
+		<a class="brand" href="/" aria-label={`${tagline} home`}
+			><span class="brand-mark">hn.</span><span
+				>{productName}<span class="brand-sub">{productQualifier}</span></span
 			></a
 		>
 		<button
@@ -57,7 +58,7 @@
 	<main id="main" tabindex="-1">{@render children()}</main>
 	<footer class="site-footer">
 		<div>
-			<a class="footer-brand" href="/">warped.</a><span
+			<a class="footer-brand" href="/">{tagline}</a><span
 				>A different lens. The same curious community.</span
 			>
 		</div>

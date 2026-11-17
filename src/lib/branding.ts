@@ -1,2 +1,4 @@
-export const tagline = 'Hacker News, engaged';
-export const siteTitle = `Warped · ${tagline}`;
+export const productName = 'Hacker News';
+export const productQualifier = 'engaged';
+export const tagline = `${productName}, ${productQualifier}`;
+export const siteTitle = tagline;

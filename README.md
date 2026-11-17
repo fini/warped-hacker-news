@@ -1,4 +1,4 @@
-# Warped Hacker News
+# Hacker News, engaged
 
 A different lens on the same curious community. A fast, text-first Hacker News
 reader with Modern (light/dark/system), LCARS, and Matrix themes.
@@ -94,7 +94,7 @@ visual language were adapted from `fini/warpz-playlists`; the Matrix workbench i
 those projects is introduced.
 
 Content comes from the [official Hacker News API](https://github.com/HackerNews/API).
-Warped is an independent reader, unaffiliated with Y Combinator. Story titles link
+This is an independent reader, unaffiliated with Y Combinator. Story titles link
 to their original destinations; discussions and profiles render public HN data.
 Voting, posting and replying happen on Hacker News. Search, saved stories,
 accounts, device sync and custom domains are future work.
