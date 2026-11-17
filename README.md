@@ -41,26 +41,41 @@ responses for deterministic data-boundary and failure checks.
 
 ## Deployment
 
-GitHub Actions validates pushes and pull requests. Successful `main` builds deploy
-to the `warped-hacker-news` Worker. Same-repository PRs receive **public** named
-previews; fork PRs run checks only. Closing a PR deletes its preview.
+Cloudflare Workers Builds pulls directly from GitHub and deploys `main`.
+GitHub Actions runs validation only and needs no Cloudflare secrets.
 
-Configure these in GitHub repository **Settings → Secrets and variables → Actions**:
+Connect the existing Worker once in Cloudflare: **Workers & Pages →
+warped-hacker-news → Settings → Builds → Connect**, then select GitHub and
+`fini/warped-hacker-news`. Use these settings:
 
-- Repository secret `CLOUDFLARE_API_TOKEN`: a dedicated Cloudflare token using the
-  **Edit Cloudflare Workers** template scoped to the intended account. Never paste
-  it in chat or commit it. Preview permissions may need additional scope according
-  to the current Cloudflare Previews documentation.
-- Repository variable `CLOUDFLARE_ACCOUNT_ID`: the intended account ID.
+| Setting           | Value                          |
+| ----------------- | ------------------------------ |
+| Production branch | `main`                         |
+| Root directory    | `/`                            |
+| Build command     | `npm run ci:build`             |
+| Deploy command    | `npx wrangler deploy`          |
+| Preview command   | `npx wrangler preview`         |
+| Node version      | `24` (also pinned in `.nvmrc`) |
 
-MCP authorization and local Wrangler OAuth do not supply GitHub Actions secrets.
-After changing credentials, rerun the failed workflow or use **Run workflow**.
-Deploy locally after checks with `npm run deploy`, using project-local Wrangler.
+Let Cloudflare manage its build credential through the dashboard. No
+`CLOUDFLARE_API_TOKEN` or account variable is needed in GitHub. Enable Preview
+Builds for trusted development branches if previews are desired; preview URLs
+are public. Cloudflare manages those previews rather than GitHub Actions.
+
+The build command checks formatting, types and unit tests before producing the
+Worker bundle. GitHub Actions additionally runs browser tests in parallel;
+Cloudflare does not wait for the GitHub job. Use pull requests and require the
+`verify` check before merging when a browser-test gate is needed.
+
+After connecting, push a commit to trigger and verify a deployment in the
+Cloudflare Builds view. A checked-in workflow does not establish the connection.
+Manual fallback: run the checks and `npm run deploy` using local Wrangler OAuth.
 
 ### Troubleshooting and rollback
 
-Use the GitHub Actions step logs to distinguish validation failures from missing
-credentials or Cloudflare authorization errors. Inspect runtime failures with
+Use GitHub Actions logs for validation failures and the Cloudflare Builds view
+for build/deployment failures. Check repository access, branch and build settings
+there if pushes do not deploy. Inspect runtime failures with
 `npx wrangler tail warped-hacker-news`. Logs and sampled traces are enabled.
 The footer shows the commit and UTC build date for the loaded release.
 

@@ -20,7 +20,8 @@
 		"test:browser": "playwright test",
 		"lint": "prettier --check .",
 		"format": "prettier --write .",
-		"deploy": "npm run build && wrangler deploy"
+		"deploy": "npm run build && wrangler deploy",
+		"ci:build": "npm run lint && npm run check && npm test && npm run build"
 	},
 	"dependencies": {
 		"sanitize-html": "^2.17.0",

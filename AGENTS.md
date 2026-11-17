@@ -34,8 +34,12 @@ links restricted to safe schemes. Never log credentials or user content.
 Run npm run lint, npm run check, npm test, npm run build and relevant browser
 checks. npm run test:browser exercises the production Worker locally and requires
 Playwright Chromium. Report verification gaps honestly.
-GitHub Actions validates changes and deploys passing main commits automatically.
-PR previews are public, isolated from production, and removed on closure. Fork
-PRs have no deployment credentials. Do not use pull_request_target to execute PR
-code. Use project-local Wrangler and preserve wrangler.jsonc.
+GitHub Actions validates changes only; it has no Cloudflare credentials.
+Cloudflare Workers Builds owns Git integration, production deployments and
+optional public previews. Configure its build command as npm run ci:build and
+its deploy command as npx wrangler deploy. Use Node 24. Browser tests run in
+GitHub independently; require the verify check before merging if that gate is
+needed. Do not use pull_request_target to execute PR code. Use project-local
+Wrangler and preserve wrangler.jsonc. Never claim Git integration is configured
+without verifying a successful Cloudflare build triggered by a Git push.
 Stage only task files and never commit local secrets, caches or test artifacts.

@@ -51,8 +51,16 @@ JavaScript. Build identity is frozen into client/server bundles during build.
 ## Delivery
 
 GitHub Actions runs formatting, type checks, focused unit tests, production build,
-and Playwright browser tests before deployment. Production is the main branch.
-PR previews share no application data because this application has no database,
-secrets or storage bindings. Preview URLs are public. Secrets are available only
-to deployment jobs for trusted same-repository changes. They are not present in
-validation jobs or external fork workflows.
+and Playwright browser tests. It performs no deployments and receives no
+Cloudflare credentials. Cloudflare Workers Builds connects directly to GitHub
+and deploys main. Its npm run ci:build command repeats formatting, type checks,
+unit tests and production build before npx wrangler deploy. Browser validation
+runs separately in GitHub; it is a merge gate only if configured as a required
+check. Node 24 is pinned in .nvmrc.
+
+Optional Cloudflare Preview Builds use npx wrangler preview for trusted branches.
+Previews have no application database, runtime secrets or storage bindings and
+are public. Preview lifecycle is managed in Cloudflare, not by GitHub Actions.
+The one-time repository connection and build credentials live in Cloudflare's
+Builds settings. The connection requires Workers CI access or dashboard access;
+source changes alone cannot enable it. README.md records exact settings.
