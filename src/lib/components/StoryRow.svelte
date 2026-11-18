@@ -4,7 +4,7 @@
 	let { item, rank }: { item: Item; rank: number } = $props();
 </script>
 
-<article class="story-row">
+<article class="story-row" id={`story-${item.id}`}>
 	<span class="story-rank">{String(rank).padStart(2, '0')}</span>
 	<div class="story-content">
 		<div class="story-heading">

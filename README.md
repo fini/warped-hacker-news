@@ -35,7 +35,7 @@ npm run test:browser
 ```
 
 Browser tests use live HN data and therefore need internet access and a healthy
-upstream API. Tests cover desktop/mobile reading, pagination, profiles, theme
+upstream API. Tests cover desktop/mobile reading, appended story batches, profiles, theme
 persistence, viewport sizing and error routes. Unit tests use mocked upstream
 responses for deterministic data-boundary and failure checks.
 

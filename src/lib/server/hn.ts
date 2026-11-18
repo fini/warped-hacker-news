@@ -61,6 +61,7 @@ export async function getFeed(feed: Feed, page: number, fetcher: typeof fetch) {
 	return {
 		...result,
 		items: result.items.filter((i) => !i.deleted && !i.dead),
+		ids,
 		total: ids.length,
 		hasMore: offset + 30 < ids.length
 	};

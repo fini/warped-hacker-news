@@ -199,7 +199,7 @@ html[data-theme='noir'] .comment-count strong {
 html[data-theme='noir'] .comment-count span {
 	font-size: 0.6rem;
 }
-html[data-theme='noir'] .pagination {
+html[data-theme='noir'] .load-more {
 	grid-column: 1/-1;
 	padding-top: 1.5rem;
 }

@@ -7,7 +7,10 @@ Worker and Static Assets; wrangler.jsonc is the deployment source of truth.
 Node 24 is used for local tooling and CI, while production runs on workerd.
 
 The root route is Top; /new, /best, /ask, /show and /jobs share one feed renderer.
-?page= selects a 30-ID slice in upstream order. /item/[id] renders stories or
+Feeds initially render 30 IDs in upstream order; More stories appends the next
+30 in place through GET /api/stories?ids=..., without changing the URL. The
+initial ID list is retained so changing upstream ranks cannot skip or duplicate
+stories mid-session. Legacy ?page= links still select a starting slice. /item/[id] renders stories or
 comments; /user/[username] renders a public profile. Invalid routes use proper
 404 responses. Upstream item/profile failures use 503; feeds retain their shell
 and provide a retry action.
@@ -26,14 +29,17 @@ upstream order. Each batch uses at most 16 upstream requests. Replies load on
 explicit demand; they do not recursively fetch a whole discussion. Partial batch
 failures retain loaded results and retry the same offset with deduplication.
 Deep nesting is capped visually at eight levels, then links to the thread root.
-Pagination is a live view: changing upstream ranks can move stories between pages.
+Appended batches retain loaded content on failure and retry the same IDs after
+partial failures with deduplication. The endpoint accepts at most 30 unique,
+positive safe-integer IDs. SvelteKit navigation snapshots restore the loaded
+list when returning from a discussion or profile; a fresh visit refreshes ranks.
 
 ## Presentation
 
 src/styles/tokens.css defines the usable baseline, base.css defines shared
 layout and controls, and motion.css defines transitions and reduced motion.
 Each file under src/themes scopes all selectors to its own root data-theme.
-Modern also uses data-appearance to honor system/light/dark preference. LCARS and
+Modern also uses data-appearance to honor system/light/dark preference. LCARS,
 Matrix and Neon Noir are intentionally dark palettes. No shared component requires LCARS.
 
 The theme registry is src/lib/themes.ts. To add a theme: register its ID/display

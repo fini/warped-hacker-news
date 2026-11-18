@@ -1,14 +1,28 @@
 import { test, expect } from '@playwright/test';
-test('reads stories, profiles and pagination', async ({ page }) => {
+test('appends stories and restores the list after reading discussions', async ({ page }) => {
 	await page.goto('/');
 	await expect(page.getByRole('heading', { name: 'Stay curious.' })).toBeVisible();
 	await expect(page.locator('.brand-sub')).toHaveText('engaged');
 	await expect(page).toHaveTitle(/Warped Hacker News, engaged/);
 	await expect(page.locator('.story-row').first()).toBeVisible();
-	await page.getByRole('link', { name: 'More stories', exact: true }).click();
-	await expect(page).toHaveURL(/page=2/);
-	await expect(page.locator('.story-rank').first()).toHaveText('31');
-	await page.locator('.comment-count').first().click();
+	const firstId = await page.locator('.story-row').first().getAttribute('id');
+	const initialCount = await page.locator('.story-row').count();
+	const more = page.getByRole('button', { name: 'More stories', exact: true });
+	await more.scrollIntoViewIfNeeded();
+	const scroll = await page.evaluate(() => scrollY);
+	await more.click();
+	await expect.poll(() => page.locator('.story-row').count()).toBeGreaterThan(initialCount);
+	const expandedCount = await page.locator('.story-row').count();
+	expect(expandedCount).toBeLessThanOrEqual(initialCount + 30);
+	await expect(page).toHaveURL(/\/$/);
+	expect(await page.locator('.story-row').first().getAttribute('id')).toBe(firstId);
+	expect(Math.abs((await page.evaluate(() => scrollY)) - scroll)).toBeLessThan(10);
+	await page.locator('.comment-count').nth(initialCount).click();
+	await expect(page.locator('.discussion-heading')).toBeVisible();
+	await page.goBack();
+	await expect(page.locator('.story-row')).toHaveCount(expandedCount);
+	expect(await page.locator('.story-row').first().getAttribute('id')).toBe(firstId);
+	await page.locator('.comment-count').nth(initialCount).click();
 	await expect(page.locator('.discussion-heading')).toBeVisible();
 	const author = page.locator('.reading-page > .story-meta a').first();
 	if (await author.count()) {
@@ -228,4 +242,61 @@ test('Neon Noir cards open discussions and profiles', async ({ page }) => {
 	await expect(page.locator('.profile-stats')).toBeVisible();
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 	await page.screenshot({ path: `test-results/noir-profile-${test.info().project.name}.png` });
+});
+
+test('more stories preserves results and retries a partial batch without duplicates', async ({
+	page,
+	isMobile
+}) => {
+	await page.goto('/');
+	const count = await page.locator('.story-row').count();
+	let calls = 0;
+	let batch = '';
+	await page.route('**/api/stories?*', async (route) => {
+		calls++;
+		const ids = new URL(route.request().url()).searchParams.get('ids')!;
+		if (calls === 1) batch = ids;
+		else expect(ids).toBe(batch);
+		await new Promise((resolve) => setTimeout(resolve, 250));
+		if (calls === 1) return route.fulfill({ status: 503, body: 'offline' });
+		const numbers = ids.split(',').map(Number);
+		await route.fulfill({
+			json: {
+				items: numbers
+					.slice(0, calls === 2 ? 2 : 30)
+					.map((id) => ({ id, title: `Recovered ${id}`, time: 1 })),
+				failed: calls === 2 ? 28 : 0
+			}
+		});
+	});
+	await page.getByRole('button', { name: 'More stories', exact: true }).click();
+	await expect(page.getByRole('button', { name: 'Loading stories…' })).toBeDisabled();
+	await expect(page.getByText('Couldn’t load more stories. Please try again.')).toBeVisible();
+	await expect(page.locator('.story-row')).toHaveCount(count);
+	await page.getByRole('button', { name: 'Retry stories' }).click();
+	await expect(page.locator('.story-row')).toHaveCount(count + 2);
+	await expect(
+		page.getByText('Some stories couldn’t be loaded. Retry to finish this batch.')
+	).toBeVisible();
+	const retry = page.getByRole('button', { name: 'Retry stories' });
+	await retry.focus();
+	await page.keyboard.press('Enter');
+	await expect(page.locator('.story-row')).toHaveCount(count + 30);
+	await expect(
+		page
+			.locator('.story-row')
+			.nth(count + 2)
+			.locator('h2 a')
+	).toBeFocused();
+	expect(calls).toBe(3);
+	expect(
+		await page.locator('.story-row').evaluateAll((rows) => new Set(rows.map((r) => r.id)).size)
+	).toBe(count + 30);
+	if (isMobile) await page.getByRole('button', { name: 'Toggle navigation' }).click();
+	await page
+		.getByRole('navigation', { name: 'Feeds' })
+		.getByRole('link', { name: 'New', exact: true })
+		.click();
+	await expect(page).toHaveURL(/\/new$/);
+	await expect(page.locator('.story-row')).toHaveCount(30);
 });

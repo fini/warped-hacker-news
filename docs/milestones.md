@@ -2,7 +2,7 @@
 
 1. **Foundation:** public repository, SvelteKit/Workers scaffold, live Top feed,
    reproducible checks, Cloudflare Git deployment and loaded build identity.
-2. **Reader:** all six feeds, pagination, story/comment reading, user profiles,
+2. **Reader:** all six feeds, appended story batches, story/comment reading, user profiles,
    editorial Modern light/dark appearance, responsive navigation and recovery.
 3. **Themes:** independent LCARS and Matrix, persisted server-rendered preference,
    semantic shared styles, accessible controls and reduced motion.

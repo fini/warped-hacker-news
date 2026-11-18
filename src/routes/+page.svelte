@@ -3,4 +3,6 @@
 	let { data } = $props();
 </script>
 
-<Feed {data} />
+{#key `${data.feed.id}:${data.page}`}
+	<Feed {data} />
+{/key}

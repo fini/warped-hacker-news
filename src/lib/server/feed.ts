@@ -12,6 +12,7 @@ export async function loadFeed(feedId: string, url: URL, fetcher: typeof fetch) 
 			feed,
 			page,
 			items: [],
+			ids: [],
 			failed: 0,
 			total: 0,
 			hasMore: false,

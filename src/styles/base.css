@@ -272,13 +272,14 @@ h2,
 .comment-count span {
 	font-size: 0.59rem;
 }
-.pagination {
+.load-more {
+	flex-wrap: wrap;
 	display: flex;
 	align-items: center;
 	gap: 1rem;
 	padding: 2rem 0;
 }
-.pagination > span {
+.load-more > span {
 	font-size: 0.75rem;
 	color: var(--muted);
 	margin-right: auto;
@@ -306,9 +307,6 @@ h2,
 .secondary {
 	background: var(--raised);
 	border: 1px solid var(--border);
-}
-.previous {
-	font-size: 0.75rem;
 }
 .site-footer {
 	border-top: 1px solid var(--border);
@@ -630,13 +628,13 @@ h2,
 	.comment-count span {
 		font-size: 0.5rem;
 	}
-	.pagination {
+	.load-more {
 		flex-wrap: wrap;
 	}
-	.pagination > span {
+	.load-more > span {
 		display: none;
 	}
-	.pagination .primary {
+	.load-more .primary {
 		margin-left: auto;
 	}
 	.site-footer {
@@ -679,4 +677,11 @@ h2,
 	height: 100dvh;
 	pointer-events: none;
 	z-index: 0;
+}
+
+.load-feedback {
+	flex-basis: 100%;
+	margin: 0;
+	color: var(--muted);
+	font-size: 0.8rem;
 }
