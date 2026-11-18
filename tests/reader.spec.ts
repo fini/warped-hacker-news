@@ -110,6 +110,7 @@ test('all feeds render and navigation is sticky', async ({ page, isMobile }) => 
 	await expect.poll(async () => Math.round((await header.boundingBox())!.y)).toBe(0);
 	if (isMobile) {
 		await expect.poll(async () => (await header.boundingBox())!.height).toBeLessThan(original - 25);
+		await expect.poll(async () => (await header.boundingBox())!.height).toBeLessThan(54);
 		await expect(nav.getByRole('link', { name: 'Jobs', exact: true })).toBeInViewport();
 		await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
 		await expect.poll(async () => (await header.boundingBox())!.height).toBeCloseTo(original, 0);
