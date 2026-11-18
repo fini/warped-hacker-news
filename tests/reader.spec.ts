@@ -366,3 +366,43 @@ test('font size and density persist and work independently across themes', async
 	await expect(page.getByRole('radio', { name: 'Large', exact: true })).toBeChecked();
 	await expect(page.getByRole('radio', { name: 'Compact', exact: true })).toBeChecked();
 });
+
+test('compact mobile feeds fit more stories and keep discussion links accessible', async ({
+	page,
+	isMobile
+}) => {
+	test.skip(!isMobile, 'Narrow feed layout');
+	await page.setViewportSize({ width: 460, height: 840 });
+	await page.goto('/');
+	await page.getByRole('button', { name: 'Appearance', exact: true }).click();
+	await page.getByRole('radio', { name: 'Small', exact: true }).check();
+	await page.getByRole('radio', { name: 'Compact', exact: true }).check();
+	await page.getByRole('button', { name: 'Apply appearance' }).click();
+	await expect(page.locator('html')).toHaveAttribute('data-density', 'compact');
+
+	const heights = await page.locator('.story-row').evaluateAll((rows) => {
+		const first = rows[0];
+		const measure = () => {
+			const top = first.getBoundingClientRect().top;
+			return {
+				height: rows[14].getBoundingClientRect().bottom - top,
+				visible: rows.filter((row) => row.getBoundingClientRect().bottom - top <= innerHeight)
+					.length
+			};
+		};
+		const compact = measure();
+		document.documentElement.dataset.density = 'normal';
+		const normal = measure();
+		document.documentElement.dataset.density = 'compact';
+		return { compact, normal };
+	});
+	expect(heights.compact.height).toBeLessThan(heights.normal.height * 0.7);
+	console.info(
+		`Stories per 840px from first row: ${heights.compact.visible} compact, ${heights.normal.visible} normal`
+	);
+
+	const first = page.locator('.story-row').first();
+	await expect(first.locator('.comment-count')).toBeHidden();
+	await first.getByRole('link', { name: /comments on / }).click();
+	await expect(page.locator('.discussion-heading')).toBeVisible();
+});
