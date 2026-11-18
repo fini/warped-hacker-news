@@ -9,6 +9,11 @@ test('appends stories and restores the list after reading discussions', async ({
 	const initialCount = await page.locator('.story-row').count();
 	const more = page.getByRole('button', { name: 'More stories', exact: true });
 	await more.scrollIntoViewIfNeeded();
+	await expect(page.locator('.site-header')).toHaveClass(/compact-header/);
+	await page
+		.locator('.brand-row')
+		.evaluate((el) => Promise.all(el.getAnimations().map((animation) => animation.finished)));
+	await more.click({ trial: true });
 	const scroll = await page.evaluate(() => scrollY);
 	await more.click();
 	await expect.poll(() => page.locator('.story-row').count()).toBeGreaterThan(initialCount);
@@ -94,11 +99,22 @@ test('invalid stories and feeds return useful errors', async ({ page }) => {
 	expect((await page.goto('/not-a-feed'))?.status()).toBe(404);
 });
 
-test('all feeds render and mobile navigation works', async ({ page, isMobile }) => {
+test('all feeds render and navigation is sticky', async ({ page, isMobile }) => {
 	await page.goto('/');
+	const nav = page.getByRole('navigation', { name: 'Feeds' });
+	await expect(nav.getByRole('link')).toHaveCount(6);
+	await expect(nav.getByRole('link', { name: 'Top', exact: true })).toBeInViewport();
+	const header = page.locator('.site-header');
+	const original = (await header.boundingBox())!.height;
+	await page.evaluate(() => scrollTo({ top: 700, behavior: 'instant' }));
+	await expect.poll(async () => Math.round((await header.boundingBox())!.y)).toBe(0);
 	if (isMobile) {
-		await page.getByRole('button', { name: 'Toggle navigation' }).click();
-		await expect(page.getByRole('navigation', { name: 'Feeds' })).toBeVisible();
+		await expect.poll(async () => (await header.boundingBox())!.height).toBeLessThan(original - 25);
+		await expect(nav.getByRole('link', { name: 'Jobs', exact: true })).toBeInViewport();
+		await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
+		await expect.poll(async () => (await header.boundingBox())!.height).toBeCloseTo(original, 0);
+	} else {
+		expect((await header.boundingBox())!.height).toBeCloseTo(original, 0);
 	}
 	for (const feed of ['new', 'best', 'ask', 'show', 'jobs']) {
 		await page.goto(`/${feed}`);
@@ -245,8 +261,7 @@ test('Neon Noir cards open discussions and profiles', async ({ page }) => {
 });
 
 test('more stories preserves results and retries a partial batch without duplicates', async ({
-	page,
-	isMobile
+	page
 }) => {
 	await page.goto('/');
 	const count = await page.locator('.story-row').count();
@@ -292,7 +307,6 @@ test('more stories preserves results and retries a partial batch without duplica
 	expect(
 		await page.locator('.story-row').evaluateAll((rows) => new Set(rows.map((r) => r.id)).size)
 	).toBe(count + 30);
-	if (isMobile) await page.getByRole('button', { name: 'Toggle navigation' }).click();
 	await page
 		.getByRole('navigation', { name: 'Feeds' })
 		.getByRole('link', { name: 'New', exact: true })
@@ -350,7 +364,6 @@ test('font size and density persist and work independently across themes', async
 		await expect(root).toHaveAttribute('data-density', 'compact');
 		expect(await size()).toBeGreaterThan(medium);
 		expect(await padding()).toBeLessThan(normal);
-		if (isMobile) await page.getByRole('button', { name: 'Toggle navigation' }).click();
 		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
 			await page.evaluate(() => innerWidth)
 		);

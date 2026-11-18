@@ -98,9 +98,12 @@ html[data-theme='lcars'] .comment-count strong {
 	html[data-theme='lcars'] .site-shell {
 		margin-top: 0;
 	}
+	html[data-theme='lcars'] .site-header nav {
+		gap: 0.125rem;
+	}
 	html[data-theme='lcars'] .site-header nav a {
-		font-size: calc(1rem * var(--font-scale));
-		padding: 0.5rem 0.65rem;
+		font-size: calc(0.9rem * var(--font-scale));
+		padding: 0.35rem 0.25rem;
 	}
 }
 

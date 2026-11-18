@@ -1,10 +1,6 @@
 <script lang="ts">
 	import '../app.css';
 	import { onMount } from 'svelte';
-	let ready = $state(false);
-	onMount(() => {
-		ready = true;
-	});
 	import { page } from '$app/state';
 	import { navigating } from '$app/state';
 	import { feeds } from '#lib/hn';
@@ -13,7 +9,16 @@
 	import Icon from '#lib/components/Icon.svelte';
 	import AmbientRain from '#lib/components/AmbientRain.svelte';
 	let { data, children } = $props();
-	let menu = $state(false);
+	let compactHeader = $state(false);
+	onMount(() => {
+		const update = () => {
+			// Separate thresholds keep the header stable while its height changes.
+			compactHeader = window.scrollY > (compactHeader ? 24 : 144);
+		};
+		update();
+		window.addEventListener('scroll', update, { passive: true });
+		return () => window.removeEventListener('scroll', update);
+	});
 </script>
 
 <svelte:head
@@ -25,28 +30,24 @@
 <AmbientRain enabled={data.motion} />
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="site-shell">
-	<header class="site-header">
-		<a class="brand" href="/" aria-label={`${tagline} home`}
-			><span class="brand-mark">hn.</span><span
-				>{productName}<span class="brand-sub">{productQualifier}</span></span
-			></a
-		>
-		<button
-			class="icon-button mobile-menu"
-			disabled={!ready}
-			aria-label="Toggle navigation"
-			aria-expanded={menu}
-			onclick={() => (menu = !menu)}><Icon name={menu ? 'close' : 'menu'} /></button
-		>
-		<nav class:open={menu} aria-label="Feeds">
+	<header class="site-header" class:compact-header={compactHeader}>
+		<div class="brand-row">
+			<div class="brand-inner">
+				<a class="brand" href="/" aria-label={`${tagline} home`}
+					><span class="brand-mark">hn.</span><span
+						>{productName}<span class="brand-sub">{productQualifier}</span></span
+					></a
+				>
+			</div>
+		</div>
+		<nav aria-label="Feeds">
 			{#each feeds as feed}<a
 					href={feed.id === 'top' ? '/' : `/${feed.id}`}
 					aria-current={(
 						feed.id === 'top' ? page.url.pathname === '/' : page.url.pathname === `/${feed.id}`
 					)
 						? 'page'
-						: undefined}
-					onclick={() => (menu = false)}>{feed.name}</a
+						: undefined}>{feed.name}</a
 				>{/each}
 		</nav>
 		<AppearancePicker
