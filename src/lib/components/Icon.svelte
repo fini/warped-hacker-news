@@ -16,10 +16,12 @@
 			| 'layout'
 			| 'panels'
 			| 'terminal'
-			| 'check';
+			| 'check'
+			| 'city';
 		size?: number;
 	} = $props();
 	const paths = {
+		city: 'M3 21V9h5v12M8 21V3h8v18M16 21V12h5v9M11 7h2M11 11h2M11 15h2M2 21h20',
 		check: 'm5 12 4 4L19 6',
 		moon: 'M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z',
 		monitor: 'M3 4h18v13H3zM8 21h8M12 17v4',

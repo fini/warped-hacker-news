@@ -34,7 +34,7 @@ src/styles/tokens.css defines the usable baseline, base.css defines shared
 layout and controls, and motion.css defines transitions and reduced motion.
 Each file under src/themes scopes all selectors to its own root data-theme.
 Modern also uses data-appearance to honor system/light/dark preference. LCARS and
-Matrix are intentionally dark palettes. No shared component requires LCARS.
+Matrix and Neon Noir are intentionally dark palettes. No shared component requires LCARS.
 
 The theme registry is src/lib/themes.ts. To add a theme: register its ID/display
 name, add an independently scoped stylesheet, import it in src/app.css, extend
@@ -70,15 +70,25 @@ source changes alone cannot enable it. README.md records exact settings.
 
 ## Ambient motion
 
-The shared ambient canvas is hidden and idle by default. Matrix enables a faint,
-sparse character rain adapted from the Jev lab reference. Its palette and mask
+The shared ambient canvas is hidden and idle by default. Matrix enables occasional fast
+character streaks adapted from the Jev lab reference, with brighter green heads
+and 5–11 seconds of quiet between short bursts. Its palette and mask
 live in the Matrix theme; shared rendering uses semantic colors and fonts. Solid
 reading surfaces protect story and discussion text. The canvas is decorative,
-ignores pointer events, renders at roughly 12 fps, and caps its drawing buffer at
-1920 by 1080. It stops when the tab is hidden, when reduced motion is requested,
+ignores pointer events, draws on animation frames only during bursts, and caps
+its drawing buffer at 1920 by 1080. No redraws run during the quiet intervals. It stops when the tab is hidden, when reduced motion is requested,
 or when Ambient motion is disabled in Appearance. Media preference changes take
 effect immediately. The one-year whn_motion cookie saves the browser preference.
-Modern and LCARS never run the animation.
+Modern, LCARS and Neon Noir never run the animation.
 
-Color-mode controls are disabled for LCARS and Matrix. A hidden form value keeps
+Color-mode controls are disabled for LCARS, Matrix and Neon Noir. A hidden form value keeps
 the saved Modern color-mode preference when either fixed dark theme is applied.
+
+## Neon Noir
+
+Neon Noir is an independent, fixed-dark theme inspired by cinematic neon cities.
+Feeds use a two-column story-card grid on desktop and one column on mobile.
+Story and profile pages retain shared reading behavior in surfaced panels. Its
+cyan/amber palette, hero skyline, static rain and card styling are scoped to
+html[data-theme='noir']. The original skyline SVG is local and needs no external
+image provider. Theme labels, descriptions and icon names live in the registry.

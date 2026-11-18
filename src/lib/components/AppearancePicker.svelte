@@ -14,11 +14,6 @@
 	let selectedMotion = $state(untrack(() => motion));
 	let selectedTheme = $state(untrack(() => theme));
 	let selectedAppearance = $state(untrack(() => appearance));
-	const descriptions = {
-		modern: 'Clean lines. Room to read.',
-		lcars: 'A little starship atmosphere.',
-		matrix: 'Follow the green signal.'
-	};
 	const appearances = [
 		{ id: 'light', name: 'Light', icon: 'sun' },
 		{ id: 'dark', name: 'Dark', icon: 'moon' },
@@ -94,18 +89,10 @@
 								bind:group={selectedTheme}
 								aria-label={choice.name}
 								aria-describedby={`theme-description-${choice.id}`}
-							/><span class="theme-option-icon"
-								><Icon
-									name={choice.id === 'modern'
-										? 'layout'
-										: choice.id === 'lcars'
-											? 'panels'
-											: 'terminal'}
-									size={22}
-								/></span
-							><span class="theme-option-copy"
+							/><span class="theme-option-icon"><Icon name={choice.icon} size={22} /></span><span
+								class="theme-option-copy"
 								><strong>{choice.name}</strong><span id={`theme-description-${choice.id}`}
-									>{descriptions[choice.id]}</span
+									>{choice.description}</span
 								></span
 							><span class="choice-indicator"><Icon name="check" size={13} /></span></label
 						>{/each}

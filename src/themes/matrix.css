@@ -50,14 +50,15 @@ html[data-theme='matrix'] .brand-sub {
 
 html[data-theme='matrix'] .ambient-background {
 	display: block;
-	color: var(--accent);
+	color: #10a547;
+	--ambient-highlight: #8cff9c;
 	font-family: var(--font-body);
-	opacity: 0.14;
+	opacity: 0.58;
 	mask-image: linear-gradient(
 		to right,
 		black,
-		rgba(0, 0, 0, 0.22) 28%,
-		rgba(0, 0, 0, 0.22) 72%,
+		rgba(0, 0, 0, 0.08) 28%,
+		rgba(0, 0, 0, 0.08) 72%,
 		black
 	);
 }

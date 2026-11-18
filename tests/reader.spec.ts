@@ -18,11 +18,18 @@ test('reads stories, profiles and pagination', async ({ page }) => {
 });
 test('themes persist and stay within mobile viewport', async ({ page }) => {
 	await page.goto('/');
-	for (const theme of ['lcars', 'matrix', 'modern']) {
+	for (const theme of ['lcars', 'matrix', 'noir', 'modern']) {
 		await page.getByRole('button', { name: 'Appearance', exact: true }).click();
 		await page
 			.getByRole('radio', {
-				name: theme === 'lcars' ? 'LCARS' : theme === 'matrix' ? 'Matrix' : 'Modern',
+				name:
+					theme === 'lcars'
+						? 'LCARS'
+						: theme === 'matrix'
+							? 'Matrix'
+							: theme === 'noir'
+								? 'Neon Noir'
+								: 'Modern',
 				exact: true
 			})
 			.check();
@@ -36,6 +43,12 @@ test('themes persist and stay within mobile viewport', async ({ page }) => {
 			path: `test-results/appearance-${theme}-${test.info().project.name}.png`
 		});
 		await page.keyboard.press('Escape');
+		if (theme === 'noir') {
+			const columns = await page
+				.locator('.feed-section')
+				.evaluate((e) => getComputedStyle(e).gridTemplateColumns.split(' ').length);
+			expect(columns).toBe(test.info().project.name === 'desktop' ? 2 : 1);
+		}
 		if (theme === 'lcars') {
 			expect(
 				await page.locator('.site-header').evaluate((e) => getComputedStyle(e).borderTopWidth)
@@ -157,7 +170,7 @@ test('fixed dark themes preserve Modern mode and ambient motion respects prefere
 	await trigger.click();
 	await page.getByRole('radio', { name: 'Dark', exact: true }).check();
 	await apply.click();
-	for (const theme of ['LCARS', 'Matrix']) {
+	for (const theme of ['LCARS', 'Neon Noir', 'Matrix']) {
 		await trigger.click();
 		await page.getByRole('radio', { name: theme, exact: true }).check();
 		await expect(apply).toBeInViewport({ ratio: 1 });
@@ -173,6 +186,14 @@ test('fixed dark themes preserve Modern mode and ambient motion respects prefere
 		.poll(() => canvas.evaluate((c) => (c as HTMLCanvasElement).toDataURL()))
 		.not.toBe(initial);
 	await page.screenshot({ path: `test-results/matrix-ambient-${test.info().project.name}.png` });
+	await expect(canvas).toHaveAttribute('data-phase', 'idle', { timeout: 4000 });
+	expect(
+		await canvas.evaluate((c) => {
+			const el = c as HTMLCanvasElement;
+			const pixels = el.getContext('2d')!.getImageData(0, 0, el.width, el.height).data;
+			return pixels.some((value, index) => index % 4 === 3 && value > 0);
+		})
+	).toBe(false);
 	await page.emulateMedia({ reducedMotion: 'reduce' });
 	await expect(canvas).toHaveAttribute('data-animating', 'false');
 	await expect(canvas).toBeHidden();
@@ -192,4 +213,19 @@ test('fixed dark themes preserve Modern mode and ambient motion respects prefere
 	await apply.click();
 	await expect(canvas).toBeHidden();
 	await expect(canvas).toHaveAttribute('data-animating', 'false');
+});
+
+test('Neon Noir cards open discussions and profiles', async ({ page }) => {
+	await page.goto('/');
+	await page.getByRole('button', { name: 'Appearance', exact: true }).click();
+	await page.getByRole('radio', { name: 'Neon Noir', exact: true }).check();
+	await page.getByRole('button', { name: 'Apply appearance' }).click();
+	await expect(page.locator('html')).toHaveAttribute('data-theme', 'noir');
+	await expect(page.locator('.story-row').first()).toBeVisible();
+	await page.locator('.comment-count').first().click();
+	await expect(page.locator('.discussion-heading')).toBeVisible();
+	await page.locator('.reading-page > .story-meta a').first().click();
+	await expect(page.locator('.profile-stats')).toBeVisible();
+	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+	await page.screenshot({ path: `test-results/noir-profile-${test.info().project.name}.png` });
 });

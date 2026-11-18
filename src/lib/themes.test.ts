@@ -2,7 +2,7 @@ import { it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { themes } from './themes';
 it('registers independent themes with scoped selectors', () => {
-	expect(themes.map((t) => t.id)).toEqual(['modern', 'lcars', 'matrix']);
+	expect(themes.map((t) => t.id)).toEqual(['modern', 'lcars', 'matrix', 'noir']);
 	for (const theme of themes) {
 		const css = readFileSync(`src/themes/${theme.id}.css`, 'utf8');
 		for (const rule of css.split('}')) {

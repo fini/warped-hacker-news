@@ -1,7 +1,7 @@
 # Warped Hacker News, engaged
 
 A different lens on the same curious community. A fast, text-first Hacker News
-reader with Modern (light/dark/system), LCARS, and Matrix themes.
+reader with Modern (light/dark/system), LCARS, Matrix, and Neon Noir themes.
 
 - **Live:** https://warped-hacker-news.fini-alring.workers.dev
 - **Source:** https://github.com/fini/warped-hacker-news

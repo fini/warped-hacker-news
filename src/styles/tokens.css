@@ -22,6 +22,7 @@
 	--space-6: 2rem;
 	--space-7: 3rem;
 	--space-8: 5rem;
+	--ambient-highlight: var(--text);
 	--dialog-backdrop: rgb(0 0 0 / 0.48);
 	--dialog-shadow: 0 1.5rem 5rem rgb(0 0 0 / 0.24);
 	--quick: 150ms;
