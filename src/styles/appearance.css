@@ -22,11 +22,11 @@
 	gap: 1rem;
 }
 .appearance-heading .eyebrow {
-	font-size: 0.6rem;
+	font-size: calc(0.6rem * var(--font-scale));
 	letter-spacing: 0.15em;
 }
 .appearance-heading h2 {
-	font-size: 1.75rem;
+	font-size: calc(1.75rem * var(--font-scale));
 	font-weight: 600;
 	letter-spacing: -0.04em;
 	line-height: 1.2;
@@ -48,7 +48,7 @@
 }
 .appearance-description {
 	color: var(--muted);
-	font-size: 0.78rem;
+	font-size: calc(0.78rem * var(--font-scale));
 	line-height: 1.7;
 	margin: 0 0 1.5rem;
 	max-width: 23rem;
@@ -60,7 +60,7 @@
 	margin: 0 0 1.5rem;
 }
 .appearance-dialog legend {
-	font-size: 0.73rem;
+	font-size: calc(0.73rem * var(--font-scale));
 	font-weight: 600;
 	margin-bottom: 0.75rem;
 	padding: 0;
@@ -68,7 +68,7 @@
 }
 .appearance-dialog legend > span {
 	float: right;
-	font-size: 0.65rem;
+	font-size: calc(0.65rem * var(--font-scale));
 	font-weight: 400;
 	color: var(--muted);
 }
@@ -113,11 +113,11 @@
 	min-width: 0;
 }
 .theme-option-copy strong {
-	font-size: 0.85rem;
+	font-size: calc(0.85rem * var(--font-scale));
 	font-weight: 600;
 }
 .theme-option-copy > span {
-	font-size: 0.69rem;
+	font-size: calc(0.69rem * var(--font-scale));
 	line-height: 1.5;
 	color: var(--muted);
 }
@@ -165,7 +165,7 @@
 	justify-content: center;
 	gap: 0.5rem;
 	min-height: 2.6rem;
-	font-size: 0.74rem;
+	font-size: calc(0.74rem * var(--font-scale));
 	border-radius: 0.45rem;
 	color: var(--muted);
 	cursor: pointer;
@@ -177,7 +177,7 @@
 	border-color: var(--border);
 }
 .appearance-hint {
-	font-size: 0.66rem;
+	font-size: calc(0.66rem * var(--font-scale));
 	line-height: 1.65;
 	color: var(--muted);
 	margin: 0.65rem 0 0;
@@ -192,7 +192,7 @@
 	padding-top: 1.15rem;
 }
 .dialog-cancel {
-	font-size: 0.75rem;
+	font-size: calc(0.75rem * var(--font-scale));
 	padding: 0.75rem 0.4rem;
 	background: transparent;
 	color: var(--muted);
@@ -209,7 +209,7 @@
 		border-radius: 1rem;
 	}
 	.appearance-heading h2 {
-		font-size: 1.6rem;
+		font-size: calc(1.6rem * var(--font-scale));
 	}
 	.theme-option {
 		gap: 0.65rem;
@@ -219,7 +219,7 @@
 		gap: 0.35rem;
 	}
 	.appearance-description {
-		font-size: 0.75rem;
+		font-size: calc(0.75rem * var(--font-scale));
 	}
 	.appearance-actions .primary {
 		padding-inline: 0.85rem;
@@ -241,11 +241,11 @@
 	gap: 0.35rem;
 }
 .motion-setting strong {
-	font-size: 0.74rem;
+	font-size: calc(0.74rem * var(--font-scale));
 	font-weight: 600;
 }
 .motion-setting small {
-	font-size: 0.66rem;
+	font-size: calc(0.66rem * var(--font-scale));
 	color: var(--muted);
 	line-height: 1.6;
 }

@@ -1,4 +1,7 @@
 :root {
+	--font-scale: 1;
+	--density-scale: 1;
+	--reading-line-height: 1.85;
 	color-scheme: light;
 	--bg: #fcfaf6;
 	--surface: #fffefa;

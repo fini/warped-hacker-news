@@ -300,3 +300,69 @@ test('more stories preserves results and retries a partial batch without duplica
 	await expect(page).toHaveURL(/\/new$/);
 	await expect(page.locator('.story-row')).toHaveCount(30);
 });
+
+test('font size and density persist and work independently across themes', async ({
+	page,
+	isMobile
+}) => {
+	if (isMobile) await page.setViewportSize({ width: 320, height: 640 });
+	await page.goto('/');
+	const root = page.locator('html');
+	const title = page.locator('.story-heading h2').first();
+	const row = page.locator('.story-row').first();
+	const size = () => title.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+	const padding = () => row.evaluate((el) => parseFloat(getComputedStyle(el).paddingTop));
+	const open = () => page.getByRole('button', { name: 'Appearance', exact: true }).click();
+	const choose = (name: string) => page.getByRole('radio', { name, exact: true }).check();
+	const apply = () => page.getByRole('button', { name: 'Apply appearance' }).click();
+	const medium = await size();
+	const normal = await padding();
+	if (isMobile) expect(medium).toBeGreaterThanOrEqual(17);
+	await open();
+	await expect(page.getByRole('radio', { name: 'Medium', exact: true })).toBeChecked();
+	await expect(page.getByRole('radio', { name: 'Normal', exact: true })).toBeChecked();
+	await choose('Small');
+	await choose('Spacious');
+	await apply();
+	await expect(root).toHaveAttribute('data-font-size', 'small');
+	await expect(root).toHaveAttribute('data-density', 'spacious');
+	expect(await size()).toBeLessThan(medium);
+	expect(await padding()).toBeGreaterThan(normal);
+
+	for (const [name, id] of [
+		['LCARS', 'lcars'],
+		['Matrix', 'matrix'],
+		['Neon Noir', 'noir']
+	]) {
+		await open();
+		await expect(
+			page.getByRole('radio', { name: id === 'lcars' ? 'Small' : 'Large', exact: true })
+		).toBeChecked();
+		await expect(
+			page.getByRole('radio', { name: id === 'lcars' ? 'Spacious' : 'Compact', exact: true })
+		).toBeChecked();
+		await choose(name);
+		await choose('Large');
+		await choose('Compact');
+		await apply();
+		await expect(root).toHaveAttribute('data-theme', id);
+		await expect(root).toHaveAttribute('data-font-size', 'large');
+		await expect(root).toHaveAttribute('data-density', 'compact');
+		expect(await size()).toBeGreaterThan(medium);
+		expect(await padding()).toBeLessThan(normal);
+		if (isMobile) await page.getByRole('button', { name: 'Toggle navigation' }).click();
+		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+			await page.evaluate(() => innerWidth)
+		);
+	}
+	await page.reload();
+	await expect(root).toHaveAttribute('data-font-size', 'large');
+	await expect(root).toHaveAttribute('data-density', 'compact');
+	await open();
+	await choose('Medium');
+	await choose('Normal');
+	await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+	await open();
+	await expect(page.getByRole('radio', { name: 'Large', exact: true })).toBeChecked();
+	await expect(page.getByRole('radio', { name: 'Compact', exact: true })).toBeChecked();
+});

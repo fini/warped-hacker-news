@@ -98,3 +98,13 @@ Story and profile pages retain shared reading behavior in surfaced panels. Its
 cyan/amber palette, hero skyline, static rain and card styling are scoped to
 html[data-theme='noir']. The original skyline SVG is local and needs no external
 image provider. Theme labels, descriptions and icon names live in the registry.
+
+## Reading preferences
+
+Font size (small/medium/large) and density (compact/normal/spacious) are independent
+of theme. Medium and Normal are the defaults. Allowlisted one-year
+HttpOnly cookies whn_font_size and whn_density populate root data attributes in
+server-rendered HTML before paint. All themes consume shared font-scale and
+spacing tokens: font size scales type without scaling the entire layout; density
+adjusts story/card spacing, comment spacing and prose line height. Browser zoom
+and device font settings remain available. Cancel discards unsaved preferences.

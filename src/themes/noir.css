@@ -24,7 +24,7 @@ html[data-theme='noir'] .site-header {
 	border-color: #31404b;
 }
 html[data-theme='noir'] .brand {
-	font-size: 1.5rem;
+	font-size: calc(1.5rem * var(--font-scale));
 	font-weight: 750;
 	letter-spacing: -0.045em;
 }
@@ -69,7 +69,7 @@ html[data-theme='noir'] .feed-intro::after {
 	background: linear-gradient(90deg, #78e6df, transparent 42%, #f4a96d);
 }
 html[data-theme='noir'] .feed-intro h1 {
-	font-size: clamp(3rem, 5.5vw, 5.2rem);
+	font-size: calc(clamp(3rem, 5.5vw, 5.2rem) * var(--font-scale));
 	font-weight: 750;
 	letter-spacing: -0.06em;
 	line-height: 1.05;
@@ -103,7 +103,7 @@ html[data-theme='noir'] .intro-aside {
 html[data-theme='noir'] .feed-section {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 1rem;
+	gap: calc(1rem * var(--density-scale));
 }
 html[data-theme='noir'] .list-heading {
 	grid-column: 1/-1;
@@ -112,7 +112,7 @@ html[data-theme='noir'] .list-heading {
 	padding-bottom: 0.5rem;
 }
 html[data-theme='noir'] .list-heading h2 {
-	font-size: 0.72rem;
+	font-size: calc(0.72rem * var(--font-scale));
 	text-transform: uppercase;
 	letter-spacing: 0.16em;
 	color: #a8c5cd;
@@ -123,9 +123,9 @@ html[data-theme='noir'] .story-row {
 	grid-template-columns: minmax(0, 1fr) auto;
 	grid-template-rows: auto 1fr;
 	align-items: start;
-	gap: 1.2rem;
-	padding: 1.5rem;
-	min-height: 14rem;
+	gap: calc(1.2rem * var(--density-scale));
+	padding: calc(1.5rem * var(--density-scale)) 1.5rem;
+	min-height: calc(14rem * var(--density-scale));
 	border: 1px solid #293b4b;
 	border-radius: 1rem;
 	background: linear-gradient(140deg, #132331, #101923 58%, #151b25);
@@ -141,7 +141,7 @@ html[data-theme='noir'] .story-rank {
 	width: auto;
 	padding-top: 0.3rem;
 	color: #ddac8b;
-	font-size: 0.65rem;
+	font-size: calc(0.65rem * var(--font-scale));
 	letter-spacing: 0.16em;
 	font-family: ui-monospace, monospace;
 }
@@ -153,7 +153,7 @@ html[data-theme='noir'] .story-heading {
 	display: block;
 }
 html[data-theme='noir'] .story-heading h2 {
-	font-size: 1.25rem;
+	font-size: calc(1.25rem * var(--font-scale));
 	font-weight: 600;
 	letter-spacing: -0.025em;
 	line-height: 1.5;
@@ -168,11 +168,11 @@ html[data-theme='noir'] .story-domain {
 	gap: 0.35rem;
 	margin-top: 0.7rem;
 	color: #8aabb8;
-	font-size: 0.65rem;
+	font-size: calc(0.65rem * var(--font-scale));
 }
 html[data-theme='noir'] .story-meta {
 	margin-top: 1.2rem;
-	font-size: 0.68rem;
+	font-size: calc(0.68rem * var(--font-scale));
 	gap: 0.55rem;
 	color: #a7b8c2;
 }
@@ -194,10 +194,10 @@ html[data-theme='noir'] .comment-count {
 }
 html[data-theme='noir'] .comment-count strong {
 	color: #a1e8df;
-	font-size: 0.7rem;
+	font-size: calc(0.7rem * var(--font-scale));
 }
 html[data-theme='noir'] .comment-count span {
-	font-size: 0.6rem;
+	font-size: calc(0.6rem * var(--font-scale));
 }
 html[data-theme='noir'] .load-more {
 	grid-column: 1/-1;
@@ -222,7 +222,7 @@ html[data-theme='noir'] .reading-page h1 {
 	font-weight: 650;
 }
 html[data-theme='noir'] .comment {
-	padding: 1.4rem 0;
+	padding: calc(1.4rem * var(--density-scale)) 0;
 }
 html[data-theme='noir'] .collapse-button {
 	background: #182d38;
@@ -255,24 +255,24 @@ html[data-theme='noir'] .theme-option {
 		background-position: 65% center;
 	}
 	html[data-theme='noir'] .feed-intro h1 {
-		font-size: 3rem;
+		font-size: calc(3rem * var(--font-scale));
 	}
 	html[data-theme='noir'] .intro-aside {
 		display: none;
 	}
 	html[data-theme='noir'] .story-row {
-		padding: 1.25rem;
-		min-height: 12.5rem;
+		padding: calc(1.25rem * var(--density-scale)) 1.25rem;
+		min-height: calc(12.5rem * var(--density-scale));
 	}
 	html[data-theme='noir'] .story-heading h2 {
-		font-size: 1.15rem;
+		font-size: calc(1.2rem * var(--font-scale));
 	}
 	html[data-theme='noir'] .reading-page {
 		padding: 1.3rem;
 		margin: 1.75rem auto;
 	}
 	html[data-theme='noir'] .brand {
-		font-size: 1.2rem;
+		font-size: calc(1.2rem * var(--font-scale));
 	}
 }
 

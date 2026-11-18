@@ -50,6 +50,8 @@
 				>{/each}
 		</nav>
 		<AppearancePicker
+			fontSize={data.fontSize}
+			density={data.density}
 			motion={data.motion}
 			theme={data.theme}
 			appearance={data.appearance}

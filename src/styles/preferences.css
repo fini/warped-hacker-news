@@ -1,0 +1,30 @@
+html[data-font-size='small'] {
+	--font-scale: 0.9;
+}
+html[data-font-size='large'] {
+	--font-scale: 1.2;
+}
+html[data-density='compact'] {
+	--density-scale: 0.65;
+	--reading-line-height: 1.65;
+}
+html[data-density='spacious'] {
+	--density-scale: 1.4;
+	--reading-line-height: 2;
+}
+
+html[data-font-size='large'] .story-heading h2,
+html[data-font-size='large'] .story-domain,
+html[data-font-size='large'] .reading-page h1,
+html[data-font-size='large'] .feed-intro h1 {
+	overflow-wrap: anywhere;
+}
+
+html[data-font-size='large'] .story-domain {
+	white-space: normal;
+}
+
+html[data-font-size='large'] .site-header nav {
+	flex-wrap: wrap;
+	row-gap: 0.25rem;
+}

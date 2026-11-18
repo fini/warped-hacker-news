@@ -1,16 +1,35 @@
 <script lang="ts">
 	import { onMount, untrack } from 'svelte';
-	import { themes, type Theme, type Appearance } from '#lib/themes';
+	import {
+		themes,
+		fontSizes,
+		densities,
+		type FontSize,
+		type Density,
+		type Theme,
+		type Appearance
+	} from '#lib/themes';
 	import Icon from './Icon.svelte';
 	let {
+		fontSize,
+		density,
 		theme,
 		motion,
 		appearance,
 		returnTo
-	}: { theme: Theme; motion: boolean; appearance: Appearance; returnTo: string } = $props();
+	}: {
+		fontSize: FontSize;
+		density: Density;
+		theme: Theme;
+		motion: boolean;
+		appearance: Appearance;
+		returnTo: string;
+	} = $props();
 	let dialog: HTMLDialogElement;
 	let ready = $state(false);
 	let open = $state(false);
+	let selectedFontSize = $state(untrack(() => fontSize));
+	let selectedDensity = $state(untrack(() => density));
 	let selectedMotion = $state(untrack(() => motion));
 	let selectedTheme = $state(untrack(() => theme));
 	let selectedAppearance = $state(untrack(() => appearance));
@@ -23,6 +42,8 @@
 		ready = true;
 	});
 	function show() {
+		selectedFontSize = fontSize;
+		selectedDensity = density;
 		selectedMotion = motion;
 		selectedTheme = theme;
 		selectedAppearance = appearance;
@@ -97,6 +118,34 @@
 							><span class="choice-indicator"><Icon name="check" size={13} /></span></label
 						>{/each}
 				</div>
+			</fieldset>
+
+			<fieldset>
+				<legend>Font size</legend>
+				<div class="appearance-segments">
+					{#each fontSizes as size}<label
+							><input
+								type="radio"
+								name="fontSize"
+								value={size}
+								bind:group={selectedFontSize}
+							/><span>{size[0].toUpperCase() + size.slice(1)}</span></label
+						>{/each}
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>Density</legend>
+				<div class="appearance-segments">
+					{#each densities as density}<label
+							><input
+								type="radio"
+								name="density"
+								value={density}
+								bind:group={selectedDensity}
+							/><span>{density[0].toUpperCase() + density.slice(1)}</span></label
+						>{/each}
+				</div>
+				<p class="appearance-hint">Adjust the space between stories and comments.</p>
 			</fieldset>
 			<fieldset class="appearance-fieldset" disabled={selectedTheme !== 'modern'}>
 				<legend>Color mode <span>Modern theme</span></legend>
