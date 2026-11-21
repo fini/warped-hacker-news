@@ -17,10 +17,17 @@
 			| 'panels'
 			| 'terminal'
 			| 'check'
-			| 'city';
+			| 'city'
+			| 'bookmark'
+			| 'bookmark-filled'
+			| 'refresh';
 		size?: number;
 	} = $props();
+	const bookmark = 'M6 4h12v16l-6-4-6 4z';
 	const paths = {
+		bookmark,
+		'bookmark-filled': bookmark,
+		refresh: 'M20 7v5h-5M20 12a8 8 0 1 0-2 5.3',
 		city: 'M3 21V9h5v12M8 21V3h8v18M16 21V12h5v9M11 7h2M11 11h2M11 15h2M2 21h20',
 		check: 'm5 12 4 4L19 6',
 		moon: 'M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z',
@@ -42,7 +49,7 @@
 	width={size}
 	height={size}
 	viewBox="0 0 24 24"
-	fill="none"
+	fill={name === 'bookmark-filled' ? 'currentColor' : 'none'}
 	stroke="currentColor"
 	stroke-width="1.6"
 	stroke-linecap="round"

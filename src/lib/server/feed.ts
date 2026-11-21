@@ -13,6 +13,8 @@ export async function loadFeed(feedId: string, url: URL, fetcher: typeof fetch) 
 			page,
 			items: [],
 			ids: [],
+			start: 0,
+			end: 0,
 			failed: 0,
 			total: 0,
 			hasMore: false,

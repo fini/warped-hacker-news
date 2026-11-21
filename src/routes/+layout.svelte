@@ -3,21 +3,112 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { navigating } from '$app/state';
+	import { goto } from '$app/navigation';
 	import { feeds } from '#lib/hn';
+	import { feedPath, recentPosition } from '#lib/reading-position';
+	import { initSavedStories } from '#lib/saved';
 	import { tagline, productName, productQualifier } from '#lib/branding';
 	import AppearancePicker from '#lib/components/AppearancePicker.svelte';
 	import Icon from '#lib/components/Icon.svelte';
 	import AmbientRain from '#lib/components/AmbientRain.svelte';
 	let { data, children } = $props();
 	let compactHeader = $state(false);
+	let newBuild = $state('');
+	const onFeed = $derived(feeds.some(({ id }) => page.url.pathname === feedPath(id)));
+
+	function reloadBuild(automatic = false) {
+		if (!newBuild) return;
+		try {
+			if (automatic && sessionStorage.getItem('whn-build-reload') === newBuild) return;
+			sessionStorage.setItem('whn-build-reload', newBuild);
+		} catch {
+			// An automatic reload is only safe when its loop guard can be saved.
+			if (automatic) return;
+		}
+		const url = new URL(window.location.href);
+		if (onFeed && scrollY > 24 && !url.searchParams.has('page'))
+			url.searchParams.set('launch', '1');
+		window.location.replace(url);
+	}
 	onMount(() => {
 		const update = () => {
 			// Separate thresholds keep the header stable while its height changes.
 			compactHeader = window.scrollY > (compactHeader ? 24 : 144);
 		};
+		const disposeSaved = initSavedStories();
+		const launch = page.url.searchParams.get('launch') === '1';
+		const standalone =
+			matchMedia('(display-mode: standalone)').matches ||
+			(navigator as Navigator & { standalone?: boolean }).standalone === true;
+		const savedPosition = recentPosition();
+		const savedPath = savedPosition && feedPath(savedPosition.feed);
+		const legacyLaunch =
+			standalone &&
+			page.url.pathname === '/' &&
+			!page.url.search &&
+			(savedPath !== '/' || !!savedPosition?.anchors.length);
+		if (savedPath && (launch ? page.url.pathname !== savedPath : legacyLaunch))
+			void goto(`${savedPath}?launch=1`, { replaceState: true });
+
+		const buildKey = (build: typeof data.build) => `${build.revision}:${build.builtAt}`;
+		const loadedBuild = buildKey(data.build);
+		let checking = false;
+		let recheck = false;
+		let disposed = false;
+		async function checkBuild() {
+			if (document.hidden || disposed) return;
+			if (checking) {
+				recheck = true;
+				return;
+			}
+			checking = true;
+			try {
+				const response = await fetch('/api/version', {
+					cache: 'no-store',
+					signal: AbortSignal.timeout(8000)
+				});
+				if (!response.ok) return;
+				const latest = (await response.json()) as typeof data.build;
+				if (
+					disposed ||
+					document.hidden ||
+					typeof latest.revision !== 'string' ||
+					typeof latest.builtAt !== 'string'
+				)
+					return;
+				const key = buildKey(latest);
+				if (key === loadedBuild) return;
+				newBuild = key;
+				if (
+					standalone &&
+					onFeed &&
+					scrollY <= 24 &&
+					!navigating.to &&
+					!document.querySelector('dialog[open], [data-refreshable][aria-busy="true"]')
+				) {
+					reloadBuild(true);
+				}
+			} catch {
+				// A version check must never interrupt reading.
+			} finally {
+				checking = false;
+				if (recheck) {
+					recheck = false;
+					void checkBuild();
+				}
+			}
+		}
+
 		update();
+		void checkBuild();
 		window.addEventListener('scroll', update, { passive: true });
-		return () => window.removeEventListener('scroll', update);
+		document.addEventListener('visibilitychange', checkBuild);
+		return () => {
+			disposed = true;
+			disposeSaved();
+			window.removeEventListener('scroll', update);
+			document.removeEventListener('visibilitychange', checkBuild);
+		};
 	});
 </script>
 
@@ -50,15 +141,26 @@
 						: undefined}>{feed.name}</a
 				>{/each}
 		</nav>
-		<AppearancePicker
-			accents={data.accents}
-			fontSize={data.fontSize}
-			density={data.density}
-			motion={data.motion}
-			theme={data.theme}
-			appearance={data.appearance}
-			returnTo={page.url.pathname + page.url.search}
-		/>
+		<div class="header-actions">
+			<a
+				class="appearance-button saved-shortcut"
+				href="/saved"
+				aria-label="Saved"
+				title="Saved"
+				aria-current={page.url.pathname === '/saved' ? 'page' : undefined}
+			>
+				<Icon name="bookmark" size={20} />
+			</a>
+			<AppearancePicker
+				accents={data.accents}
+				fontSize={data.fontSize}
+				density={data.density}
+				motion={data.motion}
+				theme={data.theme}
+				appearance={data.appearance}
+				returnTo={page.url.pathname + page.url.search}
+			/>
+		</div>
 	</header>
 	<div class="theme-ornament" aria-hidden="true"></div>
 	{#if navigating.to}<div class="navigation-progress" role="status">Loading stories…</div>{/if}
@@ -79,3 +181,11 @@
 		</div>
 	</footer>
 </div>
+
+{#if newBuild}
+	<div class="reader-notice build-notice">
+		<button class="primary" type="button" onclick={() => reloadBuild()}
+			>Update available · Reload</button
+		>
+	</div>
+{/if}

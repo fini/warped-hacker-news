@@ -53,17 +53,30 @@ export async function getItems(ids: number[], fetcher: typeof fetch) {
 	);
 	return { items: results.filter((i): i is Item => Boolean(i)), failed };
 }
-export async function getFeed(feed: Feed, page: number, fetcher: typeof fetch) {
-	const ids = await request<number[]>(endpoints[feed], fetcher);
-	if (!Array.isArray(ids)) throw new Error('Hacker News returned an unexpected response.');
-	const offset = (page - 1) * 30;
-	const result = await getItems(ids.slice(offset, offset + 30), fetcher);
+export async function getFeed(
+	feed: Feed,
+	page: number,
+	fetcher: typeof fetch,
+	anchors: number[] = []
+) {
+	const raw = await request<number[]>(endpoints[feed], fetcher);
+	if (!Array.isArray(raw)) throw new Error('Hacker News returned an unexpected response.');
+	const ids = [...new Set(raw.filter((id) => Number.isSafeInteger(id) && id > 0))];
+	const anchor = anchors.find((id) => ids.includes(id));
+	const start = anchor === undefined ? (page - 1) * 30 : Math.max(0, ids.indexOf(anchor) - 10);
+	const end = Math.min(start + 30, ids.length);
+	const result = await getItems(ids.slice(start, end), fetcher);
+	const items = result.items.filter((i) => !i.deleted && !i.dead);
+	const anchorId = anchors.find((id) => items.some((item) => item.id === id));
 	return {
 		...result,
-		items: result.items.filter((i) => !i.deleted && !i.dead),
+		items,
+		start,
+		end,
+		anchorId,
 		ids,
 		total: ids.length,
-		hasMore: offset + 30 < ids.length
+		hasMore: end < ids.length
 	};
 }
 export async function getUser(name: string, fetcher: typeof fetch) {

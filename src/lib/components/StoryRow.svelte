@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { age, domain, safeUrl, type Item } from '#lib/hn';
 	import Icon from './Icon.svelte';
+	import SaveStory from './SaveStory.svelte';
 	let { item, rank }: { item: Item; rank: number } = $props();
 	const source = $derived(domain(item.url));
 	const commentCount = $derived(item.descendants ?? 0);
@@ -28,6 +29,7 @@
 				<span class="meta-dot compact-meta" aria-hidden="true">·</span>
 				<span class="compact-meta">{source}</span>
 			{/if}
+			<SaveStory {item} />
 		</div>
 	</div>
 	<a class="comment-count" href={`/item/${item.id}`} aria-label={commentLabel}

@@ -282,3 +282,11 @@ html[data-theme='noir'] .feed-section > .notice {
 html[data-theme='noir'] .story-heading h2 {
 	overflow-wrap: anywhere;
 }
+
+@media (max-width: 43rem) {
+	html[data-theme='noir'][data-density='compact'] .story-row .story-meta .save-story {
+		inset-inline-start: auto;
+		inset-inline-end: 1.25rem;
+		top: 0.25rem;
+	}
+}

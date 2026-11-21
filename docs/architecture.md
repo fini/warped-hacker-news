@@ -109,3 +109,18 @@ server-rendered HTML before paint. All themes consume shared font-scale and
 spacing tokens: font size scales type without scaling the entire layout; density
 adjusts story/card spacing, comment spacing and prose line height. Browser zoom
 and device font settings remain available. Cancel discards unsaved preferences.
+
+## Home Screen reading
+
+Pull-to-refresh and foreground refresh use the same feed endpoint. It resolves
+an optional list of anchor candidates against the current HN ranks and fetches
+one 30-item window. Earlier and later batches reuse the bounded stories API.
+A saved feed position expires after one hour and stores the HN ID, viewport
+offset and previous ranking so new entries above the anchor can be identified.
+Home Screen launches opt in through the start URL and normal deep links keep
+their destination. The version endpoint is uncached and uses the release
+identity already present in the page.
+
+Saved stories live in browser storage on the device. They store only the HN ID,
+title, safe article URL and time saved. The same store powers feed bookmarks,
+discussion controls and the Saved page.

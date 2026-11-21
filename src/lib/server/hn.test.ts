@@ -29,6 +29,17 @@ describe('HN data boundary', () => {
 		expect(result.hasMore).toBe(true);
 		expect(fetcher).toHaveBeenCalledTimes(31);
 	});
+	it('restores the nearest available story in one bounded feed window', async () => {
+		const fetcher = mockFetch((path) => {
+			if (path.includes('topstories')) return Array.from({ length: 100 }, (_, i) => i + 1);
+			const id = Number(path.match(/item\/(\d+)/)?.[1]);
+			return id === 64 ? { id, dead: true } : { id, title: 'Story' };
+		});
+		const batch = await getFeed('top', 1, fetcher, [101, 64, 65]);
+		expect(batch).toMatchObject({ start: 53, end: 83, anchorId: 65 });
+		expect(batch.items.some(({ id }) => id === 64)).toBe(false);
+		expect(fetcher).toHaveBeenCalledTimes(31);
+	});
 	it('retains successful items and reports failures, with bounded concurrency', async () => {
 		let active = 0,
 			max = 0;

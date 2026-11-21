@@ -43,6 +43,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		'Content-Security-Policy',
 		"frame-ancestors 'none'; object-src 'none'; base-uri 'self'"
 	);
-	response.headers.set('Cache-Control', 'private, no-cache');
+	if (response.headers.get('Cache-Control') !== 'no-store')
+		response.headers.set('Cache-Control', 'private, no-cache');
 	return response;
 };

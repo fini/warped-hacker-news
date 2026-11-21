@@ -3,6 +3,7 @@
 	import { page } from '$app/state';
 	import { age, domain, safeUrl } from '#lib/hn';
 	import CommentList from '#lib/components/CommentList.svelte';
+	import SaveStory from '#lib/components/SaveStory.svelte';
 	import Icon from '#lib/components/Icon.svelte';
 	let { data } = $props();
 </script>
@@ -19,6 +20,10 @@
 		<span>{data.item.score ?? 0} points</span>{#if data.item.by}<span>·</span><a
 				href={`/user/${data.item.by}`}>{data.item.by}</a
 			>{/if}<span>·</span><span>{age(data.item.time)}</span>
+		{#if data.item.title && !data.item.deleted && !data.item.dead}<SaveStory
+				item={data.item}
+				showText
+			/>{/if}
 	</div>
 	{#if safeUrl(data.item.url)}<a class="article-link" href={safeUrl(data.item.url)}
 			>Read on {domain(data.item.url)} <Icon name="external" size={15} /></a
