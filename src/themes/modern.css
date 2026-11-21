@@ -28,14 +28,14 @@ html[data-theme='modern'][data-appearance='dark'] {
 }
 
 html[data-theme='modern'][data-accent='ocean'] {
-	--accent: light-dark(#225fba, #94c2ff);
+	--accent: light-dark(#194de0, #73a7ff);
 }
 html[data-theme='modern'][data-accent='forest'] {
-	--accent: light-dark(#28744b, #8dd7a7);
+	--accent: light-dark(#007751, #39e6a4);
 }
 html[data-theme='modern'][data-accent='plum'] {
-	--accent: light-dark(#894598, #e2a4ed);
+	--accent: light-dark(#b5117a, #ff72cf);
 }
 html[data-theme='modern'][data-accent='ochre'] {
-	--accent: light-dark(#94600e, #efbd66);
+	--accent: light-dark(#a35b00, #ffd447);
 }

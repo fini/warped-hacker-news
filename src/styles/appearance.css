@@ -351,6 +351,14 @@
 	border-radius: 50%;
 	background: var(--swatch);
 }
+.accent-options[data-color-mode='dark'] .accent-swatch {
+	background: var(--swatch-dark);
+}
+@media (prefers-color-scheme: dark) {
+	.accent-options[data-color-mode='system'] .accent-swatch {
+		background: var(--swatch-dark);
+	}
+}
 @media (max-width: 24rem) {
 	.accent-options {
 		grid-template-columns: repeat(3, minmax(0, 1fr));

@@ -128,11 +128,38 @@
 				</div>
 			</fieldset>
 
+			<fieldset class="appearance-fieldset" disabled={selectedTheme !== 'modern'}>
+				<legend>Color mode <span>Modern theme</span></legend>
+				<div class="appearance-segments">
+					{#each appearances as mode}<label
+							><input
+								type="radio"
+								name="appearance"
+								value={mode.id}
+								bind:group={selectedAppearance}
+								aria-label={mode.name}
+							/><Icon name={mode.icon} size={17} /><span>{mode.name}</span></label
+						>{/each}
+				</div>
+				<p class="appearance-hint">
+					{selectedTheme === 'modern'
+						? 'System follows your device’s light or dark setting.'
+						: 'This theme has its own dark palette. Your color mode is saved for Modern.'}
+				</p>
+			</fieldset>
+			{#if selectedTheme !== 'modern'}<input
+					type="hidden"
+					name="appearance"
+					value={selectedAppearance}
+				/>{/if}
 			{#each accentThemes as accentTheme}
 				{#if selectedTheme === accentTheme}
 					<fieldset>
 						<legend>Accent color</legend>
-						<div class="accent-options">
+						<div
+							class="accent-options"
+							data-color-mode={accentTheme === 'modern' ? selectedAppearance : 'dark'}
+						>
 							{#each accentPalettes[accentTheme] as color}
 								<label>
 									<input
@@ -143,7 +170,11 @@
 										onchange={() =>
 											(selectedAccents = { ...selectedAccents, [accentTheme]: color.id })}
 									/>
-									<span class="accent-swatch" style:--swatch={color.swatch}></span>
+									<span
+										class="accent-swatch"
+										style:--swatch={color.swatch}
+										style:--swatch-dark={'darkSwatch' in color ? color.darkSwatch : color.swatch}
+									></span>
 									<span>{color.name}</span>
 								</label>
 							{/each}
@@ -180,30 +211,6 @@
 				</div>
 				<p class="appearance-hint">Adjust the space between stories and comments.</p>
 			</fieldset>
-			<fieldset class="appearance-fieldset" disabled={selectedTheme !== 'modern'}>
-				<legend>Color mode <span>Modern theme</span></legend>
-				<div class="appearance-segments">
-					{#each appearances as mode}<label
-							><input
-								type="radio"
-								name="appearance"
-								value={mode.id}
-								bind:group={selectedAppearance}
-								aria-label={mode.name}
-							/><Icon name={mode.icon} size={17} /><span>{mode.name}</span></label
-						>{/each}
-				</div>
-				<p class="appearance-hint">
-					{selectedTheme === 'modern'
-						? 'System follows your device’s light or dark setting.'
-						: 'This theme has its own dark palette. Your color mode is saved for Modern.'}
-				</p>
-			</fieldset>
-			{#if selectedTheme !== 'modern'}<input
-					type="hidden"
-					name="appearance"
-					value={selectedAppearance}
-				/>{/if}
 			{#if selectedTheme === 'matrix'}
 				<label class="motion-setting"
 					><span

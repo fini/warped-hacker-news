@@ -26,11 +26,11 @@ export function resolveDensity(value: unknown): Density {
 
 export const accentPalettes = {
 	modern: [
-		{ id: 'terracotta', name: 'Terracotta', swatch: '#bb4028' },
-		{ id: 'ocean', name: 'Ocean', swatch: '#225fba' },
-		{ id: 'forest', name: 'Forest', swatch: '#28744b' },
-		{ id: 'plum', name: 'Plum', swatch: '#894598' },
-		{ id: 'ochre', name: 'Ochre', swatch: '#94600e' }
+		{ id: 'terracotta', name: 'Original', swatch: '#bb4028', darkSwatch: '#f19875' },
+		{ id: 'ocean', name: 'Electric Blue', swatch: '#194de0', darkSwatch: '#73a7ff' },
+		{ id: 'forest', name: 'Jade', swatch: '#007751', darkSwatch: '#39e6a4' },
+		{ id: 'plum', name: 'Hot Pink', swatch: '#b5117a', darkSwatch: '#ff72cf' },
+		{ id: 'ochre', name: 'Gold', swatch: '#a35b00', darkSwatch: '#ffd447' }
 	],
 	noir: [
 		{ id: 'cyan', name: 'Cyan', swatch: '#73e7e1' },

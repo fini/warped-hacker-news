@@ -434,11 +434,20 @@ test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
 	await expect(trigger).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
 	await trigger.click();
 	await expect(palette.getByRole('radio')).toHaveCount(5);
-	await expect(palette.getByRole('radio', { name: 'Terracotta' })).toBeChecked();
-	await choose('Ocean');
+	const original = palette.getByRole('radio', { name: 'Original', exact: true });
+	const originalSwatch = original.locator('..').locator('.accent-swatch');
+	await expect(original).toBeChecked();
+	await expect(originalSwatch).toHaveCSS('background-color', 'rgb(187, 64, 40)');
+	await choose('Dark');
+	await expect(originalSwatch).toHaveCSS('background-color', 'rgb(241, 152, 117)');
+	await choose('System');
+	await page.emulateMedia({ colorScheme: 'dark' });
+	await expect(originalSwatch).toHaveCSS('background-color', 'rgb(241, 152, 117)');
+	await page.emulateMedia({ colorScheme: 'light' });
+	await choose('Electric Blue');
 	await apply();
 	await expect(root).toHaveAttribute('data-accent', 'ocean');
-	await expect(activeFeed).toHaveCSS('color', 'rgb(34, 95, 186)');
+	await expect(activeFeed).toHaveCSS('color', 'rgb(25, 77, 224)');
 
 	await trigger.click();
 	await choose('Dark');
@@ -455,10 +464,10 @@ test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
 	await choose('LCARS');
 	await expect(palette).toBeHidden();
 	await choose('Modern');
-	await expect(palette.getByRole('radio', { name: 'Ocean' })).toBeChecked();
+	await expect(palette.getByRole('radio', { name: 'Electric Blue' })).toBeChecked();
 	await apply();
 	await expect(root).toHaveAttribute('data-accent', 'ocean');
-	await expect(activeFeed).toHaveCSS('color', 'rgb(148, 194, 255)');
+	await expect(activeFeed).toHaveCSS('color', 'rgb(115, 167, 255)');
 
 	await trigger.click();
 	await choose('Neon Noir');
