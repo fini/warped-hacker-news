@@ -469,8 +469,8 @@ test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
 	await expect(originalSwatch).toHaveCSS('background-color', 'rgb(241, 152, 117)');
 	await expect(apply).toHaveCSS('background-color', 'rgb(241, 152, 117)');
 	await page.emulateMedia({ colorScheme: 'light' });
-	await choose('Electric Blue');
-	const blue = await swatch('Electric Blue').evaluate((el) => getComputedStyle(el).backgroundColor);
+	await choose('Blue');
+	const blue = await swatch('Blue').evaluate((el) => getComputedStyle(el).backgroundColor);
 	await expect(apply).toHaveCSS('background-color', blue);
 	await expect(root).toHaveAttribute('data-accent', 'terracotta');
 	await apply.click();
@@ -506,10 +506,8 @@ test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
 	await choose('LCARS');
 	await expect(palette).toBeHidden();
 	await choose('Modern');
-	await expect(palette.getByRole('radio', { name: 'Electric Blue' })).toBeChecked();
-	const darkBlue = await swatch('Electric Blue').evaluate(
-		(el) => getComputedStyle(el).backgroundColor
-	);
+	await expect(palette.getByRole('radio', { name: 'Blue' })).toBeChecked();
+	const darkBlue = await swatch('Blue').evaluate((el) => getComputedStyle(el).backgroundColor);
 	await expect(apply).toHaveCSS('background-color', darkBlue);
 	await apply.click();
 	await expect(root).toHaveAttribute('data-accent', 'ocean');

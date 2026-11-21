@@ -330,9 +330,11 @@
 	position: relative;
 	display: grid;
 	justify-items: center;
-	align-content: center;
+	align-content: start;
 	gap: 0.3rem;
 	min-height: 3.3rem;
+	padding-block: 0.45rem;
+	text-align: center;
 	border: 1px solid transparent;
 	border-radius: 0.5rem;
 	font-size: calc(0.65rem * var(--font-scale));

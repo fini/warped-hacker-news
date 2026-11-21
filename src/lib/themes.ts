@@ -36,7 +36,7 @@ const noirColors = [
 export const accentPalettes = {
 	modern: [
 		{ id: 'terracotta', name: 'Original', swatch: '#bb4028', darkSwatch: '#f19875' },
-		{ id: 'ocean', name: 'Electric Blue', swatch: '#194de0', darkSwatch: '#73a7ff' },
+		{ id: 'ocean', name: 'Blue', swatch: '#194de0', darkSwatch: '#73a7ff' },
 		{ id: 'forest', name: 'Jade', swatch: '#007751', darkSwatch: '#39e6a4' },
 		{ id: 'plum', name: 'Hot Pink', swatch: '#b5117a', darkSwatch: '#ff72cf' },
 		{ id: 'ochre', name: 'Gold', swatch: '#a35b00', darkSwatch: '#ffd447' }
