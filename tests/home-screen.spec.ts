@@ -161,12 +161,18 @@ test('save from a feed, see the same saved state in discussions, and remove afte
 	await expect(page.getByText(/No saved stories yet/)).toBeVisible();
 });
 
-test('pulling down from the top refreshes the feed on touch', async ({ page, isMobile }) => {
+test('pulling down tracks the gesture and animates until the feed refreshes', async ({
+	page,
+	isMobile
+}) => {
 	test.skip(!isMobile, 'Touch gesture');
+	await page.emulateMedia({ reducedMotion: 'no-preference' });
 	await page.goto('/');
 	await expect(page.getByRole('button', { name: 'Appearance', exact: true })).toBeEnabled();
-	await page.route('**/api/feed/top?*', (route) =>
-		route.fulfill({
+	const finish = Promise.withResolvers<void>();
+	await page.route('**/api/feed/top?*', async (route) => {
+		await finish.promise;
+		await route.fulfill({
 			json: {
 				ids: [1],
 				items: [{ id: 1, title: 'Pulled story' }],
@@ -174,8 +180,8 @@ test('pulling down from the top refreshes the feed on touch', async ({ page, isM
 				start: 0,
 				end: 1
 			}
-		})
-	);
+		});
+	});
 	const cdp = await page.context().newCDPSession(page);
 	await cdp.send('Input.dispatchTouchEvent', {
 		type: 'touchStart',
@@ -183,11 +189,27 @@ test('pulling down from the top refreshes the feed on touch', async ({ page, isM
 	});
 	await cdp.send('Input.dispatchTouchEvent', {
 		type: 'touchMove',
+		touchPoints: [{ x: 180, y: 310 }]
+	});
+	const indicator = page.locator('.pull-refresh');
+	const icon = indicator.locator('svg');
+	await expect(indicator).toHaveText('Pull to refresh');
+	const partial = await icon.evaluate((el) => getComputedStyle(el).transform);
+	await cdp.send('Input.dispatchTouchEvent', {
+		type: 'touchMove',
 		touchPoints: [{ x: 180, y: 365 }]
 	});
-	await expect(page.locator('.pull-refresh')).toHaveText('Release to refresh');
+	await expect(indicator).toHaveText('Release to refresh');
+	await expect(icon).not.toHaveCSS('transform', partial);
 	await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+	await expect(indicator).toHaveText('Refreshing…');
+	await expect(icon).toHaveCSS('animation-name', 'refresh-spin');
+	await page.emulateMedia({ reducedMotion: 'reduce' });
+	await expect(icon).toHaveCSS('animation-name', 'none');
+	await expect(indicator).toHaveText('Refreshing…');
+	finish.resolve();
 	await expect(page.getByRole('heading', { name: 'Pulled story' })).toBeVisible();
+	await expect(indicator).toBeHidden();
 });
 
 test('an idle installed feed reloads once when a new build is found', async ({ page }) => {

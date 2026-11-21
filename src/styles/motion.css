@@ -12,7 +12,29 @@ select {
 .story-row:hover {
 	background: var(--surface);
 }
+@media (prefers-reduced-motion: no-preference) {
+	.pull-refresh-icon svg {
+		transform: rotate(var(--pull-angle));
+	}
+	.pull-refresh[data-phase='refreshing'] {
+		transition: transform 160ms ease-out;
+	}
+	.pull-refresh[data-phase='refreshing'] .pull-refresh-icon svg {
+		animation: refresh-spin 900ms linear infinite;
+	}
+	@keyframes refresh-spin {
+		from {
+			transform: rotate(100deg);
+		}
+		to {
+			transform: rotate(460deg);
+		}
+	}
+}
 @media (prefers-reduced-motion: reduce) {
+	.pull-refresh {
+		transform: translateX(-50%);
+	}
 	html {
 		scroll-behavior: auto;
 	}

@@ -44,7 +44,11 @@
 	let retryRefresh: (() => Promise<void>) | undefined;
 	let message = $state('');
 	let newAbove = $state<number[]>([]);
+	const pullThreshold = 48;
 	let pull = $state(0);
+	let pullTop = $state(0);
+	let pullRefreshing = $state(false);
+	const pullReady = $derived(pull >= pullThreshold);
 	let section: HTMLElement;
 	const ranks = $derived(new Map(ids.map((id, index) => [id, index + 1])));
 	const life = new AbortController();
@@ -286,9 +290,10 @@
 				scrollY <= 0 &&
 				!pending &&
 				!document.querySelector('dialog[open]') &&
-				!(event.target as Element)?.closest?.('button, input')
+				!(event.target as Element)?.closest?.('a, summary, button, input, select, textarea')
 			) {
 				touch = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+				pullTop = headerBottom();
 			} else resetPull();
 		};
 		const touchMove = (event: TouchEvent) => {
@@ -297,18 +302,27 @@
 			if (event.touches.length !== 1 || scrollY > 0) return resetPull();
 			const y = finger.clientY - touch.y;
 			if (y < -5 || Math.abs(finger.clientX - touch.x) > Math.max(12, y)) return resetPull();
-			if (y <= 8) return;
+			if (y <= 8) {
+				pull = 0;
+				return;
+			}
 			if (event.cancelable) event.preventDefault();
-			pull = Math.min(72, y * 0.55);
+			const distance = y * 0.55;
+			pull =
+				distance <= pullThreshold
+					? distance
+					: Math.min(72, pullThreshold + (distance - pullThreshold) * 0.4);
 		};
 		function resetPull() {
 			touch = undefined;
 			pull = 0;
 		}
 		const touchEnd = () => {
-			const ready = pull >= 48;
+			const ready = pullReady && !pending;
 			resetPull();
-			if (ready) void refresh();
+			if (!ready) return;
+			pullRefreshing = true;
+			void refresh().finally(() => (pullRefreshing = false));
 		};
 		window.addEventListener('scroll', onScroll, { passive: true });
 		window.addEventListener('pagehide', savePosition);
@@ -461,8 +475,18 @@
 		</button>
 	</div>
 {/if}
-{#if pull > 0}
-	<div class="pull-refresh" aria-hidden="true">
-		{pull >= 48 ? 'Release to refresh' : 'Pull to refresh'}
+{#if pull > 0 || pullRefreshing}
+	<div
+		class="pull-refresh"
+		data-phase={pullRefreshing ? 'refreshing' : pullReady ? 'ready' : 'pulling'}
+		style:--pull-top={`${pullTop}px`}
+		style:--pull-offset={`${pullRefreshing ? 13 : pull * 0.36}px`}
+		style:--pull-angle={`${Math.min(1, pull / pullThreshold) * 240 - 140}deg`}
+		aria-hidden="true"
+	>
+		<span class="pull-refresh-icon"><Icon name="refresh" size={18} /></span>
+		<span
+			>{pullRefreshing ? 'Refreshing…' : pullReady ? 'Release to refresh' : 'Pull to refresh'}</span
+		>
 	</div>
 {/if}
