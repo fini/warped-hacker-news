@@ -7,6 +7,8 @@
 	import { feeds } from '#lib/hn';
 	import { feedPath, recentPosition } from '#lib/reading-position';
 	import { initSavedStories } from '#lib/saved';
+	import { setAnalyticsEnabled, trackPage } from '#lib/analytics';
+	import AnalyticsPrivacy from '#lib/components/AnalyticsPrivacy.svelte';
 	import { tagline, productName, productQualifier } from '#lib/branding';
 	import AppearancePicker from '#lib/components/AppearancePicker.svelte';
 	import Icon from '#lib/components/Icon.svelte';
@@ -35,7 +37,11 @@
 		moreTrigger?.focus();
 	}
 
-	afterNavigate(closeFeeds);
+	afterNavigate(() => {
+		closeFeeds();
+		setAnalyticsEnabled(data.analyticsAvailable && data.analyticsChoice === 'yes');
+		trackPage(page.url.pathname, page.route.id, page.params.feed);
+	});
 	const onFeed = $derived(feeds.some(({ id }) => page.url.pathname === feedPath(id)));
 
 	function reloadBuild(automatic = false) {
@@ -219,8 +225,14 @@
 		<div>
 			<a href="https://news.ycombinator.com" target="_blank" rel="noreferrer"
 				>Powered by Hacker News <Icon name="external" size={13} /></a
-			><a href="https://github.com/fini/warped-hacker-news">Source on GitHub</a><small
-				title={data.build.builtAt}
+			><a href="https://github.com/fini/warped-hacker-news">Source on GitHub</a>
+			{#if data.analyticsAvailable}
+				<AnalyticsPrivacy
+					choice={data.analyticsChoice}
+					returnTo={page.url.pathname + page.url.search}
+				/>
+			{/if}
+			<small title={data.build.builtAt}
 				>Build {data.build.revision} · {data.build.builtAt.slice(0, 10)}</small
 			>
 		</div>

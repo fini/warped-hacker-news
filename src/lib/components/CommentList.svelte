@@ -5,6 +5,7 @@
 		ready = true;
 	});
 	import { untrack } from 'svelte';
+	import { trackAnalytics } from '#lib/analytics';
 	import type { Item } from '#lib/hn';
 	import Comment from './Comment.svelte';
 	import Icon from './Icon.svelte';
@@ -35,6 +36,8 @@
 			const response = await fetch(`/api/comments/${parent}?offset=${next}`);
 			if (!response.ok) throw new Error();
 			const result = await response.json();
+			if (result.items.some((item: Item) => !extra.some((entry) => entry.id === item.id)))
+				trackAnalytics('comments_load');
 			if (result.failed) {
 				partial = true;
 				failure = 'Some replies could not be loaded. Retry to recover them.';

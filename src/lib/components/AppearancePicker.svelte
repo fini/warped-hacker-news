@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { trackAnalytics } from '#lib/analytics';
 	import { onMount, untrack } from 'svelte';
 	import {
 		themes,
@@ -114,6 +115,7 @@
 	<form
 		action="/appearance"
 		method="POST"
+		onsubmit={() => trackAnalytics('appearance_apply')}
 		data-preview-mode={selectedTheme === 'modern' ? selectedAppearance : 'dark'}
 		style:--preview-light={previewAccent?.swatch}
 		style:--preview-dark={previewAccent ? darkAccent(previewAccent) : undefined}

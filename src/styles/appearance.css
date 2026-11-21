@@ -379,3 +379,41 @@
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
 }
+
+.privacy-link {
+	background: transparent;
+	color: inherit;
+	padding: 0;
+	text-align: start;
+}
+.privacy-link:hover {
+	text-decoration: underline;
+}
+.analytics-notice {
+	position: fixed;
+	inset: auto 0.8rem max(0.8rem, env(safe-area-inset-bottom));
+	z-index: 22;
+	width: fit-content;
+	max-width: calc(100% - 1.6rem);
+	margin-inline: auto;
+	padding: 0.85rem 1rem;
+	background: var(--surface);
+	color: var(--text);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	box-shadow: var(--dialog-shadow);
+}
+.analytics-notice p,
+.analytics-dialog p {
+	margin: 0.5rem 0;
+	font-size: calc(0.8rem * var(--font-scale));
+	line-height: 1.5;
+}
+.analytics-choices,
+.analytics-dialog .analytics-choices {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 0.65rem;
+}

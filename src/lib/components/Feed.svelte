@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { siteTitle } from '#lib/branding';
+	import { trackAnalytics } from '#lib/analytics';
 	import { page } from '$app/state';
 	import { beforeNavigate, replaceState, snapshot } from '$app/navigation';
 	import { onMount, untrack, tick } from 'svelte';
@@ -176,6 +177,7 @@
 			initialFailed = 0;
 			feedFailure = '';
 			message = 'Feed refreshed.';
+			if (!launch && !jump) trackAnalytics('feed_refresh');
 			await tick();
 			if (!active) return;
 			if (anchorId && position) {
@@ -232,6 +234,7 @@
 				failure = 'Some stories couldn’t be loaded. Retry to finish this batch.';
 			} else if (earlier) first = start;
 			else cursor = end;
+			if (added.length) trackAnalytics('stories_load', action);
 			message = `Added ${added.length} ${added.length === 1 ? 'story' : 'stories'}.`;
 			await tick();
 			if (!active) return;

@@ -98,3 +98,26 @@ This is an independent reader, unaffiliated with Y Combinator. Story titles link
 to their original destinations; discussions and profiles render public HN data.
 Voting, posting and replying happen on Hacker News. Search, saved stories,
 accounts, device sync and custom domains are future work.
+
+### Optional Google Analytics
+
+Warped HN sends opt-in page views and feature counts through the GA4 Measurement
+Protocol. Set `GA4_MEASUREMENT_ID` as a Cloudflare runtime variable and
+`GA4_API_SECRET` as a Worker secret for a dedicated Warped HN web data stream.
+Create the secret in GA4 under Admin → Data streams → the Warped HN web stream →
+Measurement Protocol API secrets. Both settings are required to enable the
+consent UI and collection. Preview deployments should omit both. Never commit
+the API secret or put it in a public or build-time variable.
+
+Analytics receives only allowlisted screen categories and actions. No Google
+browser script, persistent Google identifier, user ID, raw URL, referrer, reader
+IP or user agent, story title, username or bookmark content is sent to Google.
+Events include `page_view`, `feed_refresh`, `stories_load`, `comments_load`,
+`bookmark_change` and `appearance_apply`. The GA4 `action` parameter distinguishes
+saving from removing and loading earlier stories from loading more stories.
+Register `action` as an event-scoped custom dimension to report those breakdowns.
+
+A random per-tab identifier expires after 30 minutes of inactivity. The
+first-party consent preference expires after 180 days and can be changed under
+**Analytics privacy** in the footer. This setup is for counts and feature
+usage. Google’s tag-based acquisition and device reporting may be limited.

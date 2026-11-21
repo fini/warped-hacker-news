@@ -1,3 +1,4 @@
+import { trackAnalytics } from './analytics';
 import { writable } from 'svelte/store';
 import { safeUrl, type Item } from './hn';
 
@@ -62,5 +63,6 @@ export function toggleSaved(item: Pick<Item, 'id' | 'title' | 'url'>) {
 				...before
 			];
 	localStorage.setItem(key, JSON.stringify(stories));
+	trackAnalytics('bookmark_change', exists ? 'remove' : 'save');
 	store.set({ ready: true, available: true, stories });
 }
