@@ -14,11 +14,6 @@ html[data-theme='matrix'] {
 	--font-heading: var(--font-body);
 	--radius: 0.2rem;
 }
-html[data-theme='matrix'] .brand-mark {
-	border: 1px solid var(--accent);
-	background: transparent;
-	color: var(--accent);
-}
 html[data-theme='matrix'] .feed-intro h1 {
 	letter-spacing: -0.06em;
 	text-shadow: 0 0 1.5rem #55ed8726;

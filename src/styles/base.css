@@ -94,17 +94,11 @@ h2,
 	text-decoration: none;
 }
 .brand-mark {
+	display: block;
 	flex-shrink: 0;
-	background: var(--accent);
-	color: var(--on-accent);
 	border-radius: 0.7rem;
 	width: 2.8rem;
 	height: 2.8rem;
-	display: grid;
-	place-items: center;
-	letter-spacing: -0.1em;
-	font-size: calc(1.3rem * var(--font-scale));
-	padding-right: 0;
 }
 .brand-sub {
 	display: block;

@@ -32,13 +32,6 @@ html[data-theme='noir'] .brand {
 	font-weight: 750;
 	letter-spacing: -0.045em;
 }
-html[data-theme='noir'] .brand-mark {
-	background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 22%, var(--bg)), #15232e);
-	border: 1px solid var(--accent);
-	color: var(--accent);
-	border-radius: 0.65rem;
-	box-shadow: 0 0 1.8rem color-mix(in srgb, var(--accent) 10%, transparent);
-}
 html[data-theme='noir'] .brand-sub {
 	color: #d3a68c;
 	letter-spacing: 0.18em;

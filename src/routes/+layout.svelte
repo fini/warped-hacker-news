@@ -34,7 +34,7 @@
 		<div class="brand-row">
 			<div class="brand-inner">
 				<a class="brand" href="/" aria-label={`${tagline} home`}
-					><span class="brand-mark">hn.</span><span
+					><img class="brand-mark" src="/favicon.svg" width="48" height="48" alt="" /><span
 						>{productName}<span class="brand-sub">{productQualifier}</span></span
 					></a
 				>
