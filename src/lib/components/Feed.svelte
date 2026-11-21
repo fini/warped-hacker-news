@@ -369,7 +369,7 @@
 			<button
 				class="feed-refresh"
 				type="button"
-				disabled={!!pending}
+				disabled={!active || !!pending}
 				onclick={() => (failedAction === 'refresh' ? retryRefresh?.() : refresh(readingPosition()))}
 			>
 				<Icon name="refresh" size={15} />{pending === 'refresh'
@@ -400,7 +400,11 @@
 			</p>{/if}
 		{#if first > 0 && stories.length}
 			<div class="earlier-stories">
-				<button class="secondary" disabled={!!pending} onclick={(event) => loadBatch(event, true)}>
+				<button
+					class="secondary"
+					disabled={!active || !!pending}
+					onclick={(event) => loadBatch(event, true)}
+				>
 					{pending === 'earlier'
 						? 'Loading earlier stories…'
 						: failedAction === 'earlier'
@@ -430,7 +434,7 @@
 					: 'You’re all caught up.'}</span
 		>
 		{#if cursor < ids.length}
-			<button class="primary" onclick={(event) => loadBatch(event)} disabled={!!pending}>
+			<button class="primary" onclick={(event) => loadBatch(event)} disabled={!active || !!pending}>
 				{pending === 'more'
 					? 'Loading stories…'
 					: failedAction === 'more'
@@ -450,7 +454,7 @@
 		<button
 			class="primary"
 			type="button"
-			disabled={!!pending}
+			disabled={!active || !!pending}
 			onclick={() => refresh(undefined, true)}
 		>
 			↑ New stories above

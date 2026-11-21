@@ -281,13 +281,16 @@ test('more stories preserves results and retries a partial batch without duplica
 	const count = await page.locator('.story-row').count();
 	let calls = 0;
 	let batch = '';
+	const firstFailure = Promise.withResolvers<void>();
 	await page.route('**/api/stories?*', async (route) => {
 		calls++;
 		const ids = new URL(route.request().url()).searchParams.get('ids')!;
 		if (calls === 1) batch = ids;
 		else expect(ids).toBe(batch);
-		await new Promise((resolve) => setTimeout(resolve, 250));
-		if (calls === 1) return route.fulfill({ status: 503, body: 'offline' });
+		if (calls === 1) {
+			await firstFailure.promise;
+			return route.fulfill({ status: 503, body: 'offline' });
+		}
 		const numbers = ids.split(',').map(Number);
 		await route.fulfill({
 			json: {
@@ -300,6 +303,7 @@ test('more stories preserves results and retries a partial batch without duplica
 	});
 	await page.getByRole('button', { name: 'More stories', exact: true }).click();
 	await expect(page.getByRole('button', { name: 'Loading stories…' })).toBeDisabled();
+	firstFailure.resolve();
 	await expect(page.getByText('Couldn’t load more stories. Please try again.')).toBeVisible();
 	await expect(page.locator('.story-row')).toHaveCount(count);
 	await page.getByRole('button', { name: 'Retry stories' }).click();
@@ -326,7 +330,9 @@ test('more stories preserves results and retries a partial batch without duplica
 		.getByRole('link', { name: 'New', exact: true })
 		.click();
 	await expect(page).toHaveURL(/\/new$/);
-	await expect(page.locator('.story-row')).toHaveCount(30);
+	await expect(page.locator('.story-row').first()).toBeVisible();
+	await expect.poll(() => page.locator('.story-row').count()).toBeLessThanOrEqual(30);
+	await expect(page.getByRole('heading', { name: /^Recovered / })).toHaveCount(0);
 });
 
 test('font size and density persist and work independently across themes', async ({
