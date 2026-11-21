@@ -14,7 +14,11 @@ html[data-theme='noir'] {
 	--font-heading: var(--font-body);
 	--radius: 0.9rem;
 	background:
-		radial-gradient(ellipse at 95% 8%, #1b3039 0, transparent 42%),
+		radial-gradient(
+			ellipse at 95% 8%,
+			color-mix(in srgb, var(--accent) 17%, var(--bg)) 0,
+			transparent 42%
+		),
 		radial-gradient(ellipse at 0% 45%, #251d26 0, transparent 38%), var(--bg);
 }
 html[data-theme='noir'] .site-shell {
@@ -29,23 +33,19 @@ html[data-theme='noir'] .brand {
 	letter-spacing: -0.045em;
 }
 html[data-theme='noir'] .brand-mark {
-	background: linear-gradient(145deg, #123c42, #15232e);
-	border: 1px solid #61c8c7;
-	color: #a5fff3;
+	background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 22%, var(--bg)), #15232e);
+	border: 1px solid var(--accent);
+	color: var(--accent);
 	border-radius: 0.65rem;
-	box-shadow: 0 0 1.8rem #50d8d21a;
+	box-shadow: 0 0 1.8rem color-mix(in srgb, var(--accent) 10%, transparent);
 }
 html[data-theme='noir'] .brand-sub {
 	color: #d3a68c;
 	letter-spacing: 0.18em;
 }
 html[data-theme='noir'] .site-header nav a[aria-current='page'] {
-	color: #ffbf8a;
-	border-color: #ffbf8a;
-}
-html[data-theme='noir'] .appearance-button {
-	background: #101a26;
-	border-color: #344756;
+	color: var(--accent);
+	border-color: var(--accent);
 }
 html[data-theme='noir'] .feed-intro {
 	position: relative;
@@ -66,7 +66,7 @@ html[data-theme='noir'] .feed-intro::after {
 	position: absolute;
 	inset: auto 0 0;
 	height: 1px;
-	background: linear-gradient(90deg, #78e6df, transparent 42%, #f4a96d);
+	background: linear-gradient(90deg, var(--accent), transparent 42%, #f4a96d);
 }
 html[data-theme='noir'] .feed-intro h1 {
 	font-size: calc(clamp(3rem, 5.5vw, 5.2rem) * var(--font-scale));
@@ -76,7 +76,7 @@ html[data-theme='noir'] .feed-intro h1 {
 	max-width: 13ch;
 	margin: 1.25rem 0;
 	color: #f0f7fa;
-	text-shadow: 0 0 3rem #70ffff16;
+	text-shadow: 0 0 3rem color-mix(in srgb, var(--accent) 12%, transparent);
 }
 html[data-theme='noir'] .feed-intro p {
 	color: #c1cbd3;
@@ -95,7 +95,7 @@ html[data-theme='noir'] .intro-aside {
 	color: #d1dde3;
 	background: #0a1421b8;
 	padding: 1rem 1.2rem;
-	border-left: 2px solid #70dad5;
+	border-left: 2px solid var(--accent);
 	backdrop-filter: blur(0.5rem);
 	border-radius: 0 0.6rem 0.6rem 0;
 	margin-top: 8rem;
@@ -159,7 +159,7 @@ html[data-theme='noir'] .story-heading h2 {
 	line-height: 1.5;
 }
 html[data-theme='noir'] .story-heading h2 a:hover {
-	color: #a6fff2;
+	color: var(--accent);
 	text-decoration: none;
 }
 html[data-theme='noir'] .story-domain {
@@ -193,7 +193,7 @@ html[data-theme='noir'] .comment-count {
 	color: #9cb9bf;
 }
 html[data-theme='noir'] .comment-count strong {
-	color: #a1e8df;
+	color: var(--accent);
 	font-size: calc(0.7rem * var(--font-scale));
 }
 html[data-theme='noir'] .comment-count span {
@@ -204,9 +204,9 @@ html[data-theme='noir'] .load-more {
 	padding-top: 1.5rem;
 }
 html[data-theme='noir'] .primary {
-	background: #86e6dc;
-	color: #082427;
-	border: 1px solid #aefff1;
+	background: var(--accent);
+	color: var(--on-accent);
+	border: 1px solid var(--accent);
 	border-radius: 0.55rem;
 }
 html[data-theme='noir'] .reading-page {
@@ -227,7 +227,7 @@ html[data-theme='noir'] .comment {
 html[data-theme='noir'] .collapse-button {
 	background: #182d38;
 	border-color: #34505c;
-	color: #99f0df;
+	color: var(--accent);
 }
 html[data-theme='noir'] .site-footer {
 	border-color: #273d49;
@@ -281,4 +281,17 @@ html[data-theme='noir'] .feed-section > .notice {
 }
 html[data-theme='noir'] .story-heading h2 {
 	overflow-wrap: anywhere;
+}
+
+html[data-theme='noir'][data-accent='violet'] {
+	--accent: #c3a6ff;
+}
+html[data-theme='noir'][data-accent='pink'] {
+	--accent: #ff9ec9;
+}
+html[data-theme='noir'][data-accent='amber'] {
+	--accent: #ffc477;
+}
+html[data-theme='noir'][data-accent='lime'] {
+	--accent: #c9ec81;
 }

@@ -420,3 +420,47 @@ test('compact mobile feeds fit more stories and keep discussion links accessible
 	await first.getByRole('link', { name: /comments on / }).click();
 	await expect(page.locator('.discussion-heading')).toBeVisible();
 });
+
+test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
+	await page.emulateMedia({ colorScheme: 'light' });
+	await page.goto('/');
+	const trigger = page.getByRole('button', { name: 'Appearance', exact: true });
+	const palette = page.getByRole('group', { name: 'Accent color' });
+	const choose = (name: string) => page.getByRole('radio', { name, exact: true }).check();
+	const apply = () => page.getByRole('button', { name: 'Apply appearance' }).click();
+	const root = page.locator('html');
+	const activeFeed = page.getByRole('link', { name: 'Top', exact: true });
+	await expect(trigger).toHaveText('');
+	await expect(trigger).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+	await trigger.click();
+	await expect(palette.getByRole('radio')).toHaveCount(5);
+	await expect(palette.getByRole('radio', { name: 'Terracotta' })).toBeChecked();
+	await choose('Ocean');
+	await apply();
+	await expect(root).toHaveAttribute('data-accent', 'ocean');
+	await expect(activeFeed).toHaveCSS('color', 'rgb(34, 95, 186)');
+
+	await trigger.click();
+	await choose('Dark');
+	await choose('Neon Noir');
+	await expect(palette.getByRole('radio')).toHaveCount(5);
+	await expect(palette.getByRole('radio', { name: 'Cyan' })).toBeChecked();
+	await choose('Violet');
+	await expect(page.getByRole('button', { name: 'Apply appearance' })).toBeInViewport();
+	await apply();
+	await expect(root).toHaveAttribute('data-accent', 'violet');
+	await expect(activeFeed).toHaveCSS('color', 'rgb(195, 166, 255)');
+
+	await trigger.click();
+	await choose('LCARS');
+	await expect(palette).toBeHidden();
+	await choose('Modern');
+	await expect(palette.getByRole('radio', { name: 'Ocean' })).toBeChecked();
+	await apply();
+	await expect(root).toHaveAttribute('data-accent', 'ocean');
+	await expect(activeFeed).toHaveCSS('color', 'rgb(148, 194, 255)');
+
+	await trigger.click();
+	await choose('Neon Noir');
+	await expect(palette.getByRole('radio', { name: 'Violet' })).toBeChecked();
+});

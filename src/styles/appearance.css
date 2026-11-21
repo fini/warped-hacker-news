@@ -311,10 +311,48 @@
 	overscroll-behavior: contain;
 	padding: 0.25rem;
 	margin: -0.25rem;
+	padding-inline-end: 0.9rem;
+	scrollbar-gutter: stable;
 	scrollbar-width: thin;
 	scrollbar-color: var(--border) transparent;
 }
 .appearance-actions {
 	flex-shrink: 0;
 	margin-top: 1rem;
+}
+
+.accent-options {
+	display: grid;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	gap: 0.25rem;
+}
+.accent-options label {
+	position: relative;
+	display: grid;
+	justify-items: center;
+	align-content: center;
+	gap: 0.3rem;
+	min-height: 3.3rem;
+	border: 1px solid transparent;
+	border-radius: 0.5rem;
+	font-size: calc(0.65rem * var(--font-scale));
+	cursor: pointer;
+}
+.accent-options label:hover,
+.accent-options label:has(input:checked) {
+	background: var(--raised);
+}
+.accent-options label:has(input:checked) {
+	border-color: var(--accent);
+}
+.accent-swatch {
+	width: 1.15rem;
+	height: 1.15rem;
+	border-radius: 50%;
+	background: var(--swatch);
+}
+@media (max-width: 24rem) {
+	.accent-options {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
 }

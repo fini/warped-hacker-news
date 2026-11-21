@@ -131,16 +131,20 @@ h2,
 	color: var(--accent);
 	border-color: var(--accent);
 }
-.appearance-button,
-.icon-button {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
+.appearance-button {
+	display: grid;
+	place-items: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	padding: 0;
+	flex-shrink: 0;
 	background: transparent;
-	font-size: calc(0.75rem * var(--font-scale));
-	padding: 0.65rem 0.8rem;
-	border: 1px solid var(--border);
 	border-radius: var(--radius);
+}
+.appearance-button:hover,
+.appearance-button[aria-expanded='true'] {
+	background: var(--raised);
+	color: var(--accent);
 }
 .eyebrow {
 	display: flex;
@@ -548,9 +552,6 @@ h2,
 	.site-header nav {
 		gap: 1rem;
 	}
-	.appearance-button span {
-		display: none;
-	}
 }
 @media (max-width: 43rem) {
 	.site-shell {
@@ -608,9 +609,6 @@ h2,
 		min-height: 2.5rem;
 		padding: 0.35rem 0.2rem;
 		white-space: nowrap;
-	}
-	.appearance-button {
-		padding: 0.55rem;
 	}
 	.feed-intro {
 		padding: 3rem 0 2.5rem;

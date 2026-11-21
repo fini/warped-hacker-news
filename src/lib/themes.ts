@@ -23,3 +23,28 @@ export function resolveFontSize(value: unknown): FontSize {
 export function resolveDensity(value: unknown): Density {
 	return densities.find((density) => density === value) ?? 'normal';
 }
+
+export const accentPalettes = {
+	modern: [
+		{ id: 'terracotta', name: 'Terracotta', swatch: '#bb4028' },
+		{ id: 'ocean', name: 'Ocean', swatch: '#225fba' },
+		{ id: 'forest', name: 'Forest', swatch: '#28744b' },
+		{ id: 'plum', name: 'Plum', swatch: '#894598' },
+		{ id: 'ochre', name: 'Ochre', swatch: '#94600e' }
+	],
+	noir: [
+		{ id: 'cyan', name: 'Cyan', swatch: '#73e7e1' },
+		{ id: 'violet', name: 'Violet', swatch: '#c3a6ff' },
+		{ id: 'pink', name: 'Pink', swatch: '#ff9ec9' },
+		{ id: 'amber', name: 'Amber', swatch: '#ffc477' },
+		{ id: 'lime', name: 'Lime', swatch: '#c9ec81' }
+	]
+} as const;
+
+export type AccentTheme = keyof typeof accentPalettes;
+export type Accents = { [T in AccentTheme]: (typeof accentPalettes)[T][number]['id'] };
+
+export function resolveAccent<T extends AccentTheme>(theme: T, value: unknown): Accents[T] {
+	const palette = accentPalettes[theme];
+	return (palette.find((color) => color.id === value) ?? palette[0]).id as Accents[T];
+}

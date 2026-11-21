@@ -26,3 +26,16 @@ html[data-theme='modern'][data-appearance='dark'] {
 		--error: #ffa69e;
 	}
 }
+
+html[data-theme='modern'][data-accent='ocean'] {
+	--accent: light-dark(#225fba, #94c2ff);
+}
+html[data-theme='modern'][data-accent='forest'] {
+	--accent: light-dark(#28744b, #8dd7a7);
+}
+html[data-theme='modern'][data-accent='plum'] {
+	--accent: light-dark(#894598, #e2a4ed);
+}
+html[data-theme='modern'][data-accent='ochre'] {
+	--accent: light-dark(#94600e, #efbd66);
+}

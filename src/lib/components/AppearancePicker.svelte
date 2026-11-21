@@ -3,6 +3,8 @@
 	import {
 		themes,
 		fontSizes,
+		accentPalettes,
+		type Accents,
 		densities,
 		type FontSize,
 		type Density,
@@ -11,6 +13,7 @@
 	} from '#lib/themes';
 	import Icon from './Icon.svelte';
 	let {
+		accents,
 		fontSize,
 		density,
 		theme,
@@ -18,6 +21,7 @@
 		appearance,
 		returnTo
 	}: {
+		accents: Accents;
 		fontSize: FontSize;
 		density: Density;
 		theme: Theme;
@@ -28,11 +32,13 @@
 	let dialog: HTMLDialogElement;
 	let ready = $state(false);
 	let open = $state(false);
+	let selectedAccents = $state(untrack(() => ({ ...accents })));
 	let selectedFontSize = $state(untrack(() => fontSize));
 	let selectedDensity = $state(untrack(() => density));
 	let selectedMotion = $state(untrack(() => motion));
 	let selectedTheme = $state(untrack(() => theme));
 	let selectedAppearance = $state(untrack(() => appearance));
+	const accentThemes = ['modern', 'noir'] as const;
 	const appearances = [
 		{ id: 'light', name: 'Light', icon: 'sun' },
 		{ id: 'dark', name: 'Dark', icon: 'moon' },
@@ -42,6 +48,7 @@
 		ready = true;
 	});
 	function show() {
+		selectedAccents = { ...accents };
 		selectedFontSize = fontSize;
 		selectedDensity = density;
 		selectedMotion = motion;
@@ -70,7 +77,8 @@
 	aria-haspopup="dialog"
 	aria-expanded={open}
 	aria-controls="appearance-dialog"
-	onclick={show}><Icon name="sun" /><span>Appearance</span></button
+	title="Appearance"
+	onclick={show}><Icon name="sun" size={20} /></button
 >
 <dialog
 	bind:this={dialog}
@@ -120,6 +128,31 @@
 				</div>
 			</fieldset>
 
+			{#each accentThemes as accentTheme}
+				{#if selectedTheme === accentTheme}
+					<fieldset>
+						<legend>Accent color</legend>
+						<div class="accent-options">
+							{#each accentPalettes[accentTheme] as color}
+								<label>
+									<input
+										type="radio"
+										name={`${accentTheme}Accent`}
+										value={color.id}
+										checked={selectedAccents[accentTheme] === color.id}
+										onchange={() =>
+											(selectedAccents = { ...selectedAccents, [accentTheme]: color.id })}
+									/>
+									<span class="accent-swatch" style:--swatch={color.swatch}></span>
+									<span>{color.name}</span>
+								</label>
+							{/each}
+						</div>
+					</fieldset>
+				{:else}
+					<input type="hidden" name={`${accentTheme}Accent`} value={selectedAccents[accentTheme]} />
+				{/if}
+			{/each}
 			<fieldset>
 				<legend>Font size</legend>
 				<div class="appearance-segments">

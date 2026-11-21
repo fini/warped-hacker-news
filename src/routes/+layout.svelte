@@ -51,6 +51,7 @@
 				>{/each}
 		</nav>
 		<AppearancePicker
+			accents={data.accents}
 			fontSize={data.fontSize}
 			density={data.density}
 			motion={data.motion}
