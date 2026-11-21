@@ -105,9 +105,13 @@ Warped HN sends opt-in page views and feature counts through the GA4 Measurement
 Protocol. Set `GA4_MEASUREMENT_ID` as a Cloudflare runtime variable and
 `GA4_API_SECRET` as a Worker secret for a dedicated Warped HN web data stream.
 Create the secret in GA4 under Admin → Data streams → the Warped HN web stream →
-Measurement Protocol API secrets. Both settings are required to enable the
-consent UI and collection. Preview deployments should omit both. Never commit
-the API secret or put it in a public or build-time variable.
+Measurement Protocol API secrets. The runtime flag `ANALYTICS_ENABLED` is
+`"false"` in Wrangler. After moving to the final domain, set it to `"true"` on
+the production Worker to enable consent and collection with both credentials.
+While disabled, the site shows no consent UI, sets no analytics preference
+cookie and sends no events. Preview deployments should stay disabled and omit
+both credentials. Never commit the API secret or put it in a public or build-time
+variable.
 
 Analytics receives only allowlisted screen categories and actions. No Google
 browser script, persistent Google identifier, user ID, raw URL, referrer, reader

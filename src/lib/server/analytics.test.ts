@@ -56,8 +56,10 @@ describe('analytics privacy boundary', () => {
 		await expect(readAnalyticsBody(oversized)).resolves.toBeNull();
 	});
 	it('uses server credentials and sends no incoming headers', async () => {
-		expect(analyticsConfig('G-TEST', undefined)).toBeNull();
-		const config = analyticsConfig('G-TEST', 'unit-test')!;
+		expect(analyticsConfig(true, 'G-TEST', undefined)).toBeNull();
+		expect(analyticsConfig(false, 'G-TEST', 'unit-test')).toBeNull();
+		expect(analyticsConfig(undefined, 'G-TEST', 'unit-test')).toBeNull();
+		const config = analyticsConfig(true, 'G-TEST', 'unit-test')!;
 		const payload = measurementPayload(
 			{ ...session, event: 'bookmark_change', detail: 'save' },
 			origin

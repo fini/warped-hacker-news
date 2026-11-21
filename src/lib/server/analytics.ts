@@ -1,7 +1,11 @@
 import { analyticsEvents, type AnalyticsEvent } from '../analytics-events';
 
-export function analyticsConfig(measurementId?: string, apiSecret?: string) {
-	return /^G-[A-Z0-9]+$/.test(measurementId ?? '') && measurementId && apiSecret
+export function analyticsConfig(
+	enabled: boolean | undefined,
+	measurementId?: string,
+	apiSecret?: string
+) {
+	return enabled && /^G-[A-Z0-9]+$/.test(measurementId ?? '') && measurementId && apiSecret
 		? { measurementId, apiSecret }
 		: null;
 }

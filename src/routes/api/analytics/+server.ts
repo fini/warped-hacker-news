@@ -1,4 +1,4 @@
-import { GA4_API_SECRET, GA4_MEASUREMENT_ID } from '$app/env/private';
+import { ANALYTICS_ENABLED, GA4_API_SECRET, GA4_MEASUREMENT_ID } from '$app/env/private';
 import { consentCookie } from '#lib/analytics-events';
 import {
 	analyticsConfig,
@@ -9,7 +9,7 @@ import {
 
 export const POST: import('./$types').RequestHandler = async ({ request, url, cookies }) => {
 	const done = new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
-	const config = analyticsConfig(GA4_MEASUREMENT_ID, GA4_API_SECRET);
+	const config = analyticsConfig(ANALYTICS_ENABLED, GA4_MEASUREMENT_ID, GA4_API_SECRET);
 	if (
 		!config ||
 		cookies.get(consentCookie) !== 'yes' ||
