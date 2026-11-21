@@ -5,7 +5,7 @@ html[data-theme='noir'] {
 	--raised: #172533;
 	--text: #eaf2f5;
 	--muted: #a1b1be;
-	--accent: #73e7e1;
+	--accent: var(--accent-dark);
 	--on-accent: #07191b;
 	--border: #263747;
 	--focus: #ffb674;
@@ -274,17 +274,4 @@ html[data-theme='noir'] .feed-section > .notice {
 }
 html[data-theme='noir'] .story-heading h2 {
 	overflow-wrap: anywhere;
-}
-
-html[data-theme='noir'][data-accent='violet'] {
-	--accent: #c3a6ff;
-}
-html[data-theme='noir'][data-accent='pink'] {
-	--accent: #ff9ec9;
-}
-html[data-theme='noir'][data-accent='amber'] {
-	--accent: #ffc477;
-}
-html[data-theme='noir'][data-accent='lime'] {
-	--accent: #c9ec81;
 }

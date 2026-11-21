@@ -427,7 +427,9 @@ test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
 	const trigger = page.getByRole('button', { name: 'Appearance', exact: true });
 	const palette = page.getByRole('group', { name: 'Accent color' });
 	const choose = (name: string) => page.getByRole('radio', { name, exact: true }).check();
-	const apply = () => page.getByRole('button', { name: 'Apply appearance' }).click();
+	const apply = page.getByRole('button', { name: 'Apply appearance' });
+	const swatch = (name: string) =>
+		palette.getByRole('radio', { name, exact: true }).locator('..').locator('.accent-swatch');
 	const root = page.locator('html');
 	const activeFeed = page.getByRole('link', { name: 'Top', exact: true });
 	await expect(trigger).toHaveText('');
@@ -435,19 +437,24 @@ test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
 	await trigger.click();
 	await expect(palette.getByRole('radio')).toHaveCount(5);
 	const original = palette.getByRole('radio', { name: 'Original', exact: true });
-	const originalSwatch = original.locator('..').locator('.accent-swatch');
+	const originalSwatch = swatch('Original');
 	await expect(original).toBeChecked();
 	await expect(originalSwatch).toHaveCSS('background-color', 'rgb(187, 64, 40)');
 	await choose('Dark');
 	await expect(originalSwatch).toHaveCSS('background-color', 'rgb(241, 152, 117)');
+	await expect(apply).toHaveCSS('background-color', 'rgb(241, 152, 117)');
 	await choose('System');
 	await page.emulateMedia({ colorScheme: 'dark' });
 	await expect(originalSwatch).toHaveCSS('background-color', 'rgb(241, 152, 117)');
+	await expect(apply).toHaveCSS('background-color', 'rgb(241, 152, 117)');
 	await page.emulateMedia({ colorScheme: 'light' });
 	await choose('Electric Blue');
-	await apply();
+	const blue = await swatch('Electric Blue').evaluate((el) => getComputedStyle(el).backgroundColor);
+	await expect(apply).toHaveCSS('background-color', blue);
+	await expect(root).toHaveAttribute('data-accent', 'terracotta');
+	await apply.click();
 	await expect(root).toHaveAttribute('data-accent', 'ocean');
-	await expect(activeFeed).toHaveCSS('color', 'rgb(25, 77, 224)');
+	await expect(activeFeed).toHaveCSS('color', blue);
 
 	await trigger.click();
 	await choose('Dark');
@@ -455,19 +462,25 @@ test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
 	await expect(palette.getByRole('radio')).toHaveCount(5);
 	await expect(palette.getByRole('radio', { name: 'Cyan' })).toBeChecked();
 	await choose('Violet');
-	await expect(page.getByRole('button', { name: 'Apply appearance' })).toBeInViewport();
-	await apply();
+	const violet = await swatch('Violet').evaluate((el) => getComputedStyle(el).backgroundColor);
+	await expect(apply).toHaveCSS('background-color', violet);
+	await expect(apply).toBeInViewport();
+	await apply.click();
 	await expect(root).toHaveAttribute('data-accent', 'violet');
-	await expect(activeFeed).toHaveCSS('color', 'rgb(195, 166, 255)');
+	await expect(activeFeed).toHaveCSS('color', violet);
 
 	await trigger.click();
 	await choose('LCARS');
 	await expect(palette).toBeHidden();
 	await choose('Modern');
 	await expect(palette.getByRole('radio', { name: 'Electric Blue' })).toBeChecked();
-	await apply();
+	const darkBlue = await swatch('Electric Blue').evaluate(
+		(el) => getComputedStyle(el).backgroundColor
+	);
+	await expect(apply).toHaveCSS('background-color', darkBlue);
+	await apply.click();
 	await expect(root).toHaveAttribute('data-accent', 'ocean');
-	await expect(activeFeed).toHaveCSS('color', 'rgb(115, 167, 255)');
+	await expect(activeFeed).toHaveCSS('color', darkBlue);
 
 	await trigger.click();
 	await choose('Neon Noir');

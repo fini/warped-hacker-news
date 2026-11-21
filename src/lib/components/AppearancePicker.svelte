@@ -4,6 +4,8 @@
 		themes,
 		fontSizes,
 		accentPalettes,
+		darkAccent,
+		getAccent,
 		type Accents,
 		densities,
 		type FontSize,
@@ -38,6 +40,11 @@
 	let selectedMotion = $state(untrack(() => motion));
 	let selectedTheme = $state(untrack(() => theme));
 	let selectedAppearance = $state(untrack(() => appearance));
+	const previewAccent = $derived(
+		selectedTheme === 'modern' || selectedTheme === 'noir'
+			? getAccent(selectedTheme, selectedAccents[selectedTheme])
+			: null
+	);
 	const accentThemes = ['modern', 'noir'] as const;
 	const appearances = [
 		{ id: 'light', name: 'Light', icon: 'sun' },
@@ -104,7 +111,13 @@
 	<p id="appearance-description" class="appearance-description">
 		The same curious community. A different atmosphere.
 	</p>
-	<form action="/appearance" method="POST">
+	<form
+		action="/appearance"
+		method="POST"
+		data-preview-mode={selectedTheme === 'modern' ? selectedAppearance : 'dark'}
+		style:--preview-light={previewAccent?.swatch}
+		style:--preview-dark={previewAccent ? darkAccent(previewAccent) : undefined}
+	>
 		<input type="hidden" name="returnTo" value={returnTo} />
 		<div class="appearance-form-body">
 			<fieldset class="theme-fieldset">
@@ -156,10 +169,7 @@
 				{#if selectedTheme === accentTheme}
 					<fieldset>
 						<legend>Accent color</legend>
-						<div
-							class="accent-options"
-							data-color-mode={accentTheme === 'modern' ? selectedAppearance : 'dark'}
-						>
+						<div class="accent-options">
 							{#each accentPalettes[accentTheme] as color}
 								<label>
 									<input
@@ -172,8 +182,8 @@
 									/>
 									<span
 										class="accent-swatch"
-										style:--swatch={color.swatch}
-										style:--swatch-dark={'darkSwatch' in color ? color.darkSwatch : color.swatch}
+										style:--preview-light={color.swatch}
+										style:--preview-dark={darkAccent(color)}
 									></span>
 									<span>{color.name}</span>
 								</label>
@@ -229,7 +239,7 @@
 		</div>
 		<div class="appearance-actions">
 			<button class="dialog-cancel" type="button" onclick={() => dialog.close()}>Cancel</button
-			><button class="primary" type="submit"
+			><button class="primary" class:accent-preview={previewAccent !== null} type="submit"
 				>Apply appearance <Icon name="arrow" size={16} /></button
 			>
 		</div>

@@ -44,7 +44,15 @@ export const accentPalettes = {
 export type AccentTheme = keyof typeof accentPalettes;
 export type Accents = { [T in AccentTheme]: (typeof accentPalettes)[T][number]['id'] };
 
-export function resolveAccent<T extends AccentTheme>(theme: T, value: unknown): Accents[T] {
+export function getAccent(theme: AccentTheme, value: unknown) {
 	const palette = accentPalettes[theme];
-	return (palette.find((color) => color.id === value) ?? palette[0]).id as Accents[T];
+	return palette.find((color) => color.id === value) ?? palette[0];
+}
+
+export function resolveAccent<T extends AccentTheme>(theme: T, value: unknown): Accents[T] {
+	return getAccent(theme, value).id as Accents[T];
+}
+
+export function darkAccent(color: ReturnType<typeof getAccent>) {
+	return 'darkSwatch' in color ? color.darkSwatch : color.swatch;
 }

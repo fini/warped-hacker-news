@@ -4,7 +4,9 @@ import {
 	resolveAppearance,
 	resolveFontSize,
 	resolveDensity,
-	resolveAccent
+	resolveAccent,
+	getAccent,
+	darkAccent
 } from '#lib/themes';
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.accents = {
@@ -17,12 +19,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.theme = resolveTheme(event.cookies.get('whn_theme'));
 	event.locals.appearance = resolveAppearance(event.cookies.get('whn_appearance'));
 	const { theme, accents } = event.locals;
-	const accent = theme === 'modern' || theme === 'noir' ? accents[theme] : '';
+	const accent = theme === 'modern' || theme === 'noir' ? getAccent(theme, accents[theme]) : null;
+	const accentStyle = accent
+		? `--accent-light:${accent.swatch};--accent-dark:${darkAccent(accent)}`
+		: '';
 	const response = await resolve(event, {
 		transformPageChunk: ({ html }) =>
 			html
 				.replace('%theme%', theme)
-				.replace('%accent%', accent)
+				.replace('%accent%', accent?.id ?? '')
+				.replace('%accentStyle%', accentStyle)
 				.replace('%appearance%', event.locals.appearance)
 				.replace('%fontSize%', event.locals.fontSize)
 				.replace('%density%', event.locals.density)
