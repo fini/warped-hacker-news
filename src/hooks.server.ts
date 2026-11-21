@@ -11,7 +11,8 @@ import {
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.accents = {
 		modern: resolveAccent('modern', event.cookies.get('whn_modern_accent')),
-		noir: resolveAccent('noir', event.cookies.get('whn_noir_accent'))
+		noir: resolveAccent('noir', event.cookies.get('whn_noir_accent')),
+		noirSecondary: resolveAccent('noirSecondary', event.cookies.get('whn_noir_secondary_accent'))
 	};
 	event.locals.fontSize = resolveFontSize(event.cookies.get('whn_font_size'));
 	event.locals.density = resolveDensity(event.cookies.get('whn_density'));
@@ -20,9 +21,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.appearance = resolveAppearance(event.cookies.get('whn_appearance'));
 	const { theme, accents } = event.locals;
 	const accent = theme === 'modern' || theme === 'noir' ? getAccent(theme, accents[theme]) : null;
-	const accentStyle = accent
+	let accentStyle = accent
 		? `--accent-light:${accent.swatch};--accent-dark:${darkAccent(accent)}`
 		: '';
+	if (theme === 'noir') {
+		accentStyle += `;--accent-secondary:${getAccent('noirSecondary', accents.noirSecondary).swatch}`;
+	}
 	const response = await resolve(event, {
 		transformPageChunk: ({ html }) =>
 			html

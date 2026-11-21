@@ -4,6 +4,7 @@
 		themes,
 		fontSizes,
 		accentPalettes,
+		accentControls,
 		darkAccent,
 		getAccent,
 		type Accents,
@@ -45,7 +46,6 @@
 			? getAccent(selectedTheme, selectedAccents[selectedTheme])
 			: null
 	);
-	const accentThemes = ['modern', 'noir'] as const;
 	const appearances = [
 		{ id: 'light', name: 'Light', icon: 'sun' },
 		{ id: 'dark', name: 'Dark', icon: 'moon' },
@@ -165,20 +165,20 @@
 					name="appearance"
 					value={selectedAppearance}
 				/>{/if}
-			{#each accentThemes as accentTheme}
+			{#each accentControls as { id: accentChannel, theme: accentTheme, label }}
 				{#if selectedTheme === accentTheme}
 					<fieldset>
-						<legend>Accent color</legend>
+						<legend>{label}</legend>
 						<div class="accent-options">
-							{#each accentPalettes[accentTheme] as color}
+							{#each accentPalettes[accentChannel] as color}
 								<label>
 									<input
 										type="radio"
-										name={`${accentTheme}Accent`}
+										name={`${accentChannel}Accent`}
 										value={color.id}
-										checked={selectedAccents[accentTheme] === color.id}
+										checked={selectedAccents[accentChannel] === color.id}
 										onchange={() =>
-											(selectedAccents = { ...selectedAccents, [accentTheme]: color.id })}
+											(selectedAccents = { ...selectedAccents, [accentChannel]: color.id })}
 									/>
 									<span
 										class="accent-swatch"
@@ -191,7 +191,11 @@
 						</div>
 					</fieldset>
 				{:else}
-					<input type="hidden" name={`${accentTheme}Accent`} value={selectedAccents[accentTheme]} />
+					<input
+						type="hidden"
+						name={`${accentChannel}Accent`}
+						value={selectedAccents[accentChannel]}
+					/>
 				{/if}
 			{/each}
 			<fieldset>

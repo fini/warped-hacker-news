@@ -24,6 +24,15 @@ export function resolveDensity(value: unknown): Density {
 	return densities.find((density) => density === value) ?? 'normal';
 }
 
+const noirAmber = { id: 'amber', name: 'Amber', swatch: '#ffc477' } as const;
+const noirColors = [
+	{ id: 'cyan', name: 'Cyan', swatch: '#73e7e1' },
+	{ id: 'violet', name: 'Violet', swatch: '#c3a6ff' },
+	{ id: 'pink', name: 'Pink', swatch: '#ff9ec9' },
+	noirAmber,
+	{ id: 'lime', name: 'Lime', swatch: '#c9ec81' }
+] as const;
+
 export const accentPalettes = {
 	modern: [
 		{ id: 'terracotta', name: 'Original', swatch: '#bb4028', darkSwatch: '#f19875' },
@@ -32,24 +41,31 @@ export const accentPalettes = {
 		{ id: 'plum', name: 'Hot Pink', swatch: '#b5117a', darkSwatch: '#ff72cf' },
 		{ id: 'ochre', name: 'Gold', swatch: '#a35b00', darkSwatch: '#ffd447' }
 	],
-	noir: [
-		{ id: 'cyan', name: 'Cyan', swatch: '#73e7e1' },
-		{ id: 'violet', name: 'Violet', swatch: '#c3a6ff' },
-		{ id: 'pink', name: 'Pink', swatch: '#ff9ec9' },
-		{ id: 'amber', name: 'Amber', swatch: '#ffc477' },
-		{ id: 'lime', name: 'Lime', swatch: '#c9ec81' }
-	]
+	noir: noirColors,
+	noirSecondary: noirColors
 } as const;
 
-export type AccentTheme = keyof typeof accentPalettes;
-export type Accents = { [T in AccentTheme]: (typeof accentPalettes)[T][number]['id'] };
+export type AccentChannel = keyof typeof accentPalettes;
+export type Accents = { [T in AccentChannel]: (typeof accentPalettes)[T][number]['id'] };
 
-export function getAccent(theme: AccentTheme, value: unknown) {
+export const accentControls = [
+	{ id: 'modern', theme: 'modern', label: 'Accent color', cookie: 'whn_modern_accent' },
+	{ id: 'noir', theme: 'noir', label: 'Primary color', cookie: 'whn_noir_accent' },
+	{
+		id: 'noirSecondary',
+		theme: 'noir',
+		label: 'Secondary color',
+		cookie: 'whn_noir_secondary_accent'
+	}
+] as const;
+
+export function getAccent(theme: AccentChannel, value: unknown) {
 	const palette = accentPalettes[theme];
-	return palette.find((color) => color.id === value) ?? palette[0];
+	const defaultColor = theme === 'noirSecondary' ? noirAmber : palette[0];
+	return palette.find((color) => color.id === value) ?? defaultColor;
 }
 
-export function resolveAccent<T extends AccentTheme>(theme: T, value: unknown): Accents[T] {
+export function resolveAccent<T extends AccentChannel>(theme: T, value: unknown): Accents[T] {
 	return getAccent(theme, value).id as Accents[T];
 }
 

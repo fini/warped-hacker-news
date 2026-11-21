@@ -94,10 +94,11 @@ the saved Modern color-mode preference when either fixed dark theme is applied.
 
 Neon Noir is an independent, fixed-dark theme inspired by cinematic neon cities.
 Feeds use a two-column story-card grid on desktop and one column on mobile.
-Story and profile pages retain shared reading behavior in surfaced panels. Its
-cyan/amber palette, hero skyline, static rain and card styling are scoped to
-html[data-theme='noir']. The original skyline SVG is local and needs no external
-image provider. Theme labels, descriptions and icon names live in the registry.
+Story and profile pages retain shared reading behavior in surfaced panels.
+Primary controls links and actions, while Secondary controls story details and
+decorative highlights. The two accents default to Cyan and Amber and are saved
+independently. The generated city artwork is served as a local WebP and only
+requested by Neon Noir feeds.
 
 ## Reading preferences
 

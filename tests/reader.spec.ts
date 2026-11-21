@@ -426,6 +426,8 @@ test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
 	await page.goto('/');
 	const trigger = page.getByRole('button', { name: 'Appearance', exact: true });
 	const palette = page.getByRole('group', { name: 'Accent color' });
+	const primary = page.getByRole('group', { name: 'Primary color' });
+	const secondary = page.getByRole('group', { name: 'Secondary color' });
 	const choose = (name: string) => page.getByRole('radio', { name, exact: true }).check();
 	const apply = page.getByRole('button', { name: 'Apply appearance' });
 	const swatch = (name: string) =>
@@ -459,15 +461,27 @@ test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
 	await trigger.click();
 	await choose('Dark');
 	await choose('Neon Noir');
-	await expect(palette.getByRole('radio')).toHaveCount(5);
-	await expect(palette.getByRole('radio', { name: 'Cyan' })).toBeChecked();
-	await choose('Violet');
-	const violet = await swatch('Violet').evaluate((el) => getComputedStyle(el).backgroundColor);
+	await expect(primary.getByRole('radio')).toHaveCount(5);
+	await expect(secondary.getByRole('radio')).toHaveCount(5);
+	await expect(primary.getByRole('radio', { name: 'Cyan' })).toBeChecked();
+	await expect(secondary.getByRole('radio', { name: 'Amber' })).toBeChecked();
+	const violetRadio = primary.getByRole('radio', { name: 'Violet' });
+	const limeRadio = secondary.getByRole('radio', { name: 'Lime' });
+	await violetRadio.check();
+	await limeRadio.check();
+	const swatchColor = (radio: typeof violetRadio) =>
+		radio
+			.locator('..')
+			.locator('.accent-swatch')
+			.evaluate((el) => getComputedStyle(el).backgroundColor);
+	const violet = await swatchColor(violetRadio);
+	const lime = await swatchColor(limeRadio);
 	await expect(apply).toHaveCSS('background-color', violet);
 	await expect(apply).toBeInViewport();
 	await apply.click();
 	await expect(root).toHaveAttribute('data-accent', 'violet');
 	await expect(activeFeed).toHaveCSS('color', violet);
+	await expect(page.locator('.story-rank').first()).toHaveCSS('color', lime);
 
 	await trigger.click();
 	await choose('LCARS');
@@ -484,5 +498,6 @@ test('Modern and Neon Noir save separate accent colors', async ({ page }) => {
 
 	await trigger.click();
 	await choose('Neon Noir');
-	await expect(palette.getByRole('radio', { name: 'Violet' })).toBeChecked();
+	await expect(primary.getByRole('radio', { name: 'Violet' })).toBeChecked();
+	await expect(secondary.getByRole('radio', { name: 'Lime' })).toBeChecked();
 });

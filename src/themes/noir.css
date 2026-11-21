@@ -8,7 +8,7 @@ html[data-theme='noir'] {
 	--accent: var(--accent-dark);
 	--on-accent: #07191b;
 	--border: #263747;
-	--focus: #ffb674;
+	--focus: var(--accent-secondary);
 	--error: #ff9c9c;
 	--font-body: Inter, ui-sans-serif, system-ui, sans-serif;
 	--font-heading: var(--font-body);
@@ -19,7 +19,12 @@ html[data-theme='noir'] {
 			color-mix(in srgb, var(--accent) 17%, var(--bg)) 0,
 			transparent 42%
 		),
-		radial-gradient(ellipse at 0% 45%, #251d26 0, transparent 38%), var(--bg);
+		radial-gradient(
+			ellipse at 0% 45%,
+			color-mix(in srgb, var(--accent-secondary) 11%, var(--bg)) 0,
+			transparent 38%
+		),
+		var(--bg);
 }
 html[data-theme='noir'] .site-shell {
 	max-width: 88rem;
@@ -33,7 +38,7 @@ html[data-theme='noir'] .brand {
 	letter-spacing: -0.045em;
 }
 html[data-theme='noir'] .brand-sub {
-	color: #d3a68c;
+	color: var(--accent-secondary);
 	letter-spacing: 0.18em;
 }
 html[data-theme='noir'] .site-header nav a[aria-current='page'] {
@@ -49,9 +54,10 @@ html[data-theme='noir'] .feed-intro {
 	min-height: 21rem;
 	border: 1px solid #34424b;
 	border-radius: 1.2rem;
+	--hero-shade: linear-gradient(90deg, #080d18e8, #080d18b8 34%, #080d1826 69%, #080d180b);
 	background:
-		linear-gradient(90deg, #080d18 0%, #080d18ec 35%, #080d1880 68%, #080d1820),
-		url('/themes/neon-noir-city.svg') center right/cover;
+		var(--hero-shade),
+		url('/themes/neon-noir-city.webp') center right/cover var(--bg);
 	box-shadow: 0 1rem 3rem #0003;
 }
 html[data-theme='noir'] .feed-intro::after {
@@ -59,7 +65,7 @@ html[data-theme='noir'] .feed-intro::after {
 	position: absolute;
 	inset: auto 0 0;
 	height: 1px;
-	background: linear-gradient(90deg, var(--accent), transparent 42%, #f4a96d);
+	background: linear-gradient(90deg, var(--accent), transparent 42%, var(--accent-secondary));
 }
 html[data-theme='noir'] .feed-intro h1 {
 	font-size: calc(clamp(3rem, 5.5vw, 5.2rem) * var(--font-scale));
@@ -77,12 +83,12 @@ html[data-theme='noir'] .feed-intro p {
 	line-height: 1.8;
 }
 html[data-theme='noir'] .eyebrow {
-	color: #f6b880;
+	color: var(--accent-secondary);
 	letter-spacing: 0.18em;
 }
 html[data-theme='noir'] .status-dot {
-	background: #f6b880;
-	box-shadow: 0 0 0.7rem #ffa66277;
+	background: var(--accent-secondary);
+	box-shadow: 0 0 0.7rem color-mix(in srgb, var(--accent-secondary) 45%, transparent);
 }
 html[data-theme='noir'] .intro-aside {
 	color: #d1dde3;
@@ -125,7 +131,7 @@ html[data-theme='noir'] .story-row {
 	box-shadow: 0 0.4rem 1.25rem #0002;
 }
 html[data-theme='noir'] .story-row:hover {
-	border-color: #558681;
+	border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
 	background: linear-gradient(140deg, #172c39, #111d28 58%, #191e29);
 }
 html[data-theme='noir'] .story-rank {
@@ -133,7 +139,7 @@ html[data-theme='noir'] .story-rank {
 	grid-row: 1;
 	width: auto;
 	padding-top: 0.3rem;
-	color: #ddac8b;
+	color: var(--accent-secondary);
 	font-size: calc(0.65rem * var(--font-scale));
 	letter-spacing: 0.16em;
 	font-family: ui-monospace, monospace;
@@ -170,7 +176,7 @@ html[data-theme='noir'] .story-meta {
 	color: #a7b8c2;
 }
 html[data-theme='noir'] .points {
-	color: #edb58b;
+	color: var(--accent-secondary);
 }
 html[data-theme='noir'] .comment-count {
 	grid-column: 2;
@@ -226,14 +232,14 @@ html[data-theme='noir'] .site-footer {
 	border-color: #273d49;
 }
 html[data-theme='noir'] .footer-brand {
-	color: #e3c1a4;
+	color: var(--accent-secondary);
 }
 html[data-theme='noir'] .appearance-dialog {
 	background: #0c1420;
 	border-color: #3b5965;
 	box-shadow:
 		0 1rem 6rem #0009,
-		0 0 2rem #40dfdc0a;
+		0 0 2rem color-mix(in srgb, var(--accent) 6%, transparent);
 }
 html[data-theme='noir'] .theme-option {
 	background: #101f2c;
@@ -245,6 +251,7 @@ html[data-theme='noir'] .theme-option {
 	html[data-theme='noir'] .feed-intro {
 		min-height: 19rem;
 		padding: 2.5rem 1.4rem;
+		--hero-shade: linear-gradient(90deg, #080d18e8, #080d1890 70%);
 		background-position: 65% center;
 	}
 	html[data-theme='noir'] .feed-intro h1 {

@@ -4,7 +4,8 @@ import {
 	resolveAppearance,
 	resolveFontSize,
 	resolveDensity,
-	resolveAccent
+	resolveAccent,
+	accentControls
 } from '#lib/themes';
 export const POST: import('./$types').RequestHandler = async ({ request, cookies }) => {
 	const data = await request.formData();
@@ -15,9 +16,9 @@ export const POST: import('./$types').RequestHandler = async ({ request, cookies
 		httpOnly: true,
 		secure: new URL(request.url).protocol === 'https:'
 	};
-	for (const theme of ['modern', 'noir'] as const) {
-		const value = data.get(`${theme}Accent`);
-		if (value !== null) cookies.set(`whn_${theme}_accent`, resolveAccent(theme, value), options);
+	for (const { id, cookie } of accentControls) {
+		const value = data.get(`${id}Accent`);
+		if (value !== null) cookies.set(cookie, resolveAccent(id, value), options);
 	}
 	cookies.set('whn_font_size', resolveFontSize(data.get('fontSize')), options);
 	cookies.set('whn_density', resolveDensity(data.get('density')), options);
