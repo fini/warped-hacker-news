@@ -34,7 +34,7 @@ html[data-theme='lcars'] .brand-mark {
 html[data-theme='lcars'] .site-header nav {
 	gap: 0.4rem;
 }
-html[data-theme='lcars'] .site-header nav a {
+html[data-theme='lcars'] .site-header nav > a {
 	background: #cc99ff;
 	color: #08090d;
 	border-radius: 999rem;
@@ -43,10 +43,10 @@ html[data-theme='lcars'] .site-header nav a {
 	font-size: calc(1.15rem * var(--font-scale));
 	text-transform: uppercase;
 }
-html[data-theme='lcars'] .site-header nav a:nth-child(2n) {
+html[data-theme='lcars'] .site-header nav > a:nth-child(2n) {
 	background: #9999ff;
 }
-html[data-theme='lcars'] .site-header nav a[aria-current='page'] {
+html[data-theme='lcars'] .site-header nav > a[aria-current='page'] {
 	background: #55ddee;
 	border-color: transparent;
 }
@@ -101,7 +101,7 @@ html[data-theme='lcars'] .comment-count strong {
 	html[data-theme='lcars'] .site-header nav {
 		gap: 0.125rem;
 	}
-	html[data-theme='lcars'] .site-header nav a {
+	html[data-theme='lcars'] .site-header nav > a {
 		font-size: calc(0.9rem * var(--font-scale));
 		padding: 0.35rem 0.25rem;
 	}

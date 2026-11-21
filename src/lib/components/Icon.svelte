@@ -20,11 +20,13 @@
 			| 'city'
 			| 'bookmark'
 			| 'bookmark-filled'
-			| 'refresh';
+			| 'refresh'
+			| 'ellipsis';
 		size?: number;
 	} = $props();
 	const bookmark = 'M6 4h12v16l-6-4-6 4z';
 	const paths = {
+		ellipsis: 'M5 12h.01M12 12h.01M19 12h.01',
 		bookmark,
 		'bookmark-filled': bookmark,
 		refresh: 'M20 7v5h-5M20 12a8 8 0 1 0-2 5.3',
@@ -51,7 +53,7 @@
 	viewBox="0 0 24 24"
 	fill={name === 'bookmark-filled' ? 'currentColor' : 'none'}
 	stroke="currentColor"
-	stroke-width="1.6"
+	stroke-width={name === 'ellipsis' ? 3 : 1.6}
 	stroke-linecap="round"
 	stroke-linejoin="round"
 	aria-hidden="true"><path d={paths[name]} /></svg

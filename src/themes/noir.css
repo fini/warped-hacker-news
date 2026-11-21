@@ -41,7 +41,7 @@ html[data-theme='noir'] .brand-sub {
 	color: var(--accent-secondary);
 	letter-spacing: 0.18em;
 }
-html[data-theme='noir'] .site-header nav a[aria-current='page'] {
+html[data-theme='noir'] .site-header nav > a[aria-current='page'] {
 	color: var(--accent);
 	border-color: var(--accent);
 }

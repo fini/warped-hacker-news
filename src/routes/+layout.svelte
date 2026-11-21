@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { navigating } from '$app/state';
-	import { goto } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
 	import { feeds } from '#lib/hn';
 	import { feedPath, recentPosition } from '#lib/reading-position';
 	import { initSavedStories } from '#lib/saved';
@@ -14,6 +14,28 @@
 	let { data, children } = $props();
 	let compactHeader = $state(false);
 	let newBuild = $state('');
+	let moreFeeds: HTMLDetailsElement | undefined = $state();
+	let moreTrigger: HTMLElement | undefined = $state();
+	const mainFeeds = feeds.slice(0, 3);
+	const otherFeeds = feeds.slice(3);
+	const activeOverflow = $derived(otherFeeds.find(({ id }) => page.url.pathname === feedPath(id)));
+
+	function closeFeeds() {
+		if (moreFeeds?.open) moreFeeds.open = false;
+	}
+
+	function dismissFeeds(event: PointerEvent) {
+		if (event.target instanceof Node && !moreFeeds?.contains(event.target)) closeFeeds();
+	}
+
+	function escapeFeeds(event: KeyboardEvent) {
+		if (!moreFeeds?.open || event.key !== 'Escape') return;
+		event.preventDefault();
+		closeFeeds();
+		moreTrigger?.focus();
+	}
+
+	afterNavigate(closeFeeds);
 	const onFeed = $derived(feeds.some(({ id }) => page.url.pathname === feedPath(id)));
 
 	function reloadBuild(automatic = false) {
@@ -118,6 +140,17 @@
 		content="A fresh perspective on Hacker News. Read the stories, ideas, and conversations that matter — in your own style."
 	/></svelte:head
 >
+<svelte:window onpointerdown={dismissFeeds} onkeydown={escapeFeeds} />
+
+{#snippet feedLink(feed: (typeof feeds)[number], className = '')}
+	<a
+		class={className}
+		href={feedPath(feed.id)}
+		aria-current={page.url.pathname === feedPath(feed.id) ? 'page' : undefined}
+		onclick={closeFeeds}>{feed.name}</a
+	>
+{/snippet}
+
 <AmbientRain enabled={data.motion} />
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="site-shell">
@@ -132,14 +165,26 @@
 			</div>
 		</div>
 		<nav aria-label="Feeds">
-			{#each feeds as feed}<a
-					href={feed.id === 'top' ? '/' : `/${feed.id}`}
-					aria-current={(
-						feed.id === 'top' ? page.url.pathname === '/' : page.url.pathname === `/${feed.id}`
-					)
-						? 'page'
-						: undefined}>{feed.name}</a
-				>{/each}
+			{#each mainFeeds as feed}
+				{@render feedLink(feed)}
+			{/each}
+			{#each otherFeeds as feed}
+				{@render feedLink(feed, 'wide-feed')}
+			{/each}
+			<details bind:this={moreFeeds} class="feed-overflow" class:current={!!activeOverflow}>
+				<summary
+					bind:this={moreTrigger}
+					aria-label={activeOverflow ? `More feeds, ${activeOverflow.name} selected` : 'More feeds'}
+					title="More feeds"
+				>
+					<Icon name="ellipsis" size={20} />
+				</summary>
+				<div class="feed-overflow-panel">
+					{#each otherFeeds as feed}
+						{@render feedLink(feed)}
+					{/each}
+				</div>
+			</details>
 		</nav>
 		<div class="header-actions">
 			<a

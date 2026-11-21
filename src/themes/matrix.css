@@ -35,7 +35,7 @@ html[data-theme='matrix'] .primary {
 html[data-theme='matrix'] .story-rank {
 	color: var(--accent);
 }
-html[data-theme='matrix'] .site-header nav a[aria-current='page']::before {
+html[data-theme='matrix'] .site-header nav > a[aria-current='page']::before {
 	content: '> ';
 }
 

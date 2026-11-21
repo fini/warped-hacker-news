@@ -102,7 +102,7 @@ test('invalid stories and feeds return useful errors', async ({ page }) => {
 test('all feeds render and navigation is sticky', async ({ page, isMobile }) => {
 	await page.goto('/');
 	const nav = page.getByRole('navigation', { name: 'Feeds' });
-	await expect(nav.getByRole('link')).toHaveCount(6);
+	await expect(nav.getByRole('link')).toHaveCount(isMobile ? 3 : 6);
 	await expect(nav.getByRole('link', { name: 'Top', exact: true })).toBeInViewport();
 	const header = page.locator('.site-header');
 	const original = (await header.boundingBox())!.height;
@@ -111,9 +111,22 @@ test('all feeds render and navigation is sticky', async ({ page, isMobile }) => 
 	if (isMobile) {
 		await expect.poll(async () => (await header.boundingBox())!.height).toBeLessThan(original - 25);
 		await expect.poll(async () => (await header.boundingBox())!.height).toBeLessThan(54);
+		const more = nav.locator('summary');
+		await expect(more).toHaveAccessibleName('More feeds');
+		await expect(more).toBeInViewport();
+		await more.focus();
+		await page.keyboard.press('Enter');
 		await expect(nav.getByRole('link', { name: 'Jobs', exact: true })).toBeInViewport();
+		await page.keyboard.press('Escape');
+		await expect(more).toBeFocused();
+		await expect(nav.getByRole('link', { name: 'Jobs', exact: true })).toBeHidden();
 		await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
 		await expect.poll(async () => (await header.boundingBox())!.height).toBeCloseTo(original, 0);
+		await more.click();
+		await nav.getByRole('link', { name: 'Show HN', exact: true }).click();
+		await expect(page).toHaveURL(/\/show$/);
+		await expect(more).toHaveAccessibleName('More feeds, Show HN selected');
+		await expect(nav.getByRole('link', { name: 'Jobs', exact: true })).toBeHidden();
 	} else {
 		expect((await header.boundingBox())!.height).toBeCloseTo(original, 0);
 	}
